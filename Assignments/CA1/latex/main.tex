@@ -153,5 +153,34 @@ The accuracy relies on a trade-off between these two parameters:
 \hrule
 \vspace{0.5cm}
 
+\subsection{4. Compare the Sampling Methods}
+
+A comprehensive analytical and numerical comparison between NumPy's Direct Sampling and Langevin Dynamics was conducted in the previous sections. Specifically, the visual tracking of global particle trajectories can be referred to in Section 1.2 (Figure \ref{fig:trajectories}), while the complete numerical error analysis, including estimated means, variances, and precise absolute errors, is fully detailed in the inference table of Section 1.3 (Table \ref{tab:inference}). This section builds upon those findings by focusing on coordinate-level stability and visual density matching.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figure5_coordinate_trace.png}
+    \caption{Coordinate Trace Plot: Evolution of $x_1$ and $x_2$ for a single particle over 500 iterations.}
+    \label{fig:coordinate_trace}
+\end{figure}
+
+\subsubsection*{Coordinate Convergence Analysis}
+The coordinate trace plot (Figure \ref{fig:coordinate_trace}) maps the progression of individual coordinate dimensions over time. The tracking shows a highly dynamic initial phase where the particle positions fluctuate widely as they are pulled toward the high-density regions. By approximately iteration 30, both the $x_1$ and $x_2$ coordinates stabilize near the true mean of 0. Beyond this point, the paths show steady, bounded oscillations. This indicates that the Markov chain has successfully reached its stationary distribution, with the injected random noise maintaining the target variance without causing the system to drift.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figure6_histograms_comparison.png}
+    \caption{2D Histogram Density Comparison: NumPy Direct Sampling (left) vs. Langevin Dynamics (right).}
+    \label{fig:histograms_comparison}
+\end{figure}
+
+\subsubsection*{Density Comparison and Conclusion}
+The side-by-side 2D histograms (Figure \ref{fig:histograms_comparison}) divide the space into discrete bins to show the exact density concentration of the generated samples. 
+\begin{itemize}
+    \item \textbf{Direct Sampling:} Displays a perfectly concentric, radially symmetric density pattern that matches a standard 2D Gaussian distribution flawlessly. This is because the samples are fully independent and drawn directly from the true distribution.
+    \item \textbf{Langevin Dynamics:} Strongly mirrors this central concentration, proving that the score-driven gradient vector successfully pulls the particle population into the correct density shape. 
+\end{itemize}
+Minor local variations or asymmetric textures visible in the Langevin histogram are standard artifacts of running a finite number of iterations ($T=500$) with a discrete step size ($\epsilon=0.1$). This visualization confirms that despite minor numerical discretization errors, Langevin dynamics successfully explores and maps the true underlying probability density of the target space.
+
 
 \end{document}
