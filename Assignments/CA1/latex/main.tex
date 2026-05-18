@@ -4,7 +4,7 @@
 \input{setting.tex}
 
 \geometry{a4paper, margin=1in}
-\graphicspath{{assests/images/}}
+\graphicspath{{assets/images/}}
 
 % --- Document Info ---
 \newcommand{\CourseName}{Introduction to Data Science}
@@ -31,17 +31,20 @@
 \pagenumbering{arabic}
 
 \section{Introduction}
-This report outlines the findings and visualizations for Data Science Assignment 1. The project encompasses three primary practical tasks: statistical sampling and inference using 2D Gaussian distributions, storytelling through interactive Tableau dashboards for Global Tuberculosis data, and the visual improvement of a financial Power BI dashboard. The programmatic implementation for data processing and mathematical modeling can be found in the accompanying Jupyter Notebook.
+This report outlines the findings and visualizations for Data Science Assignment 1. The project encompasses three primary practical tasks: statistical sampling and inference using 2D Gaussian distributions, storytelling through interactive Tableau dashboards for Global Tuberculosis data, and the visual improvement of a financial Power BI dashboard.
+The programmatic implementation for data processing and mathematical modeling can be found in the accompanying Jupyter Notebook.
 
 \section{Task 1: Sampling and Inference}
 
 \subsection{1. Define and Visualize the Distribution}
 
-Figure \ref{fig:heatmap} displays the probability density function (PDF) of a standard 2D Gaussian distribution centered at the origin (0,0). The color intensity represents the probability density, with the darkest red region indicating the highest probability at the mean. The color fades outward in a perfectly uniform gradient as the probability density approaches zero at the tails of the distribution.
+Figure \ref{fig:heatmap} displays the probability density function (PDF) of a standard 2D Gaussian distribution centered at the origin (0,0).
+The color intensity represents the probability density, with the darkest red region indicating the highest probability at the mean.
+The color fades outward in a perfectly uniform gradient as the probability density approaches zero at the tails of the distribution.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.65\textwidth]{assets/images/figure1_heatmap.png}
+    \includegraphics[width=0.65\textwidth]{figure1_heatmap.png}
     \caption{Heatmap of the 2D Gaussian target distribution ($\mu=[0,0]$, $\Sigma=I$)}
     \label{fig:heatmap}
 \end{figure}
@@ -65,45 +68,90 @@ In our specific case, because the off-diagonal elements are exactly zero and the
 \hrule
 \vspace{0.5cm}
 
-\section{Task 2: Tableau Dashboard Storytelling}
-This section presents the interactive dashboards created to analyze the Global Tuberculosis Burden.
+\subsection{2. Sampling Methods}
 
-\subsection{Global TB Overview \& Maps}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{img/tableau_map.png}
-%     \caption{Global Overview and Geographic Distribution of TB Cases}
-%     \label{fig:tableau_map}
-% \end{figure}
+In this section, we generate 1000 samples from the target distribution using two distinct methods: direct sampling via NumPy's built-in multivariate normal generator, and Langevin Dynamics sampling.
 
-\subsection{Key Performance Indicators (KPIs)}
-% Discuss the KPIs you chose (e.g., Estimated Cases, Deaths, Treatment Success Rate).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{figure2_langevin_trajectories.png}
+    \caption{Sampling Trajectories of 10 particles using Langevin Dynamics}
+    \label{fig:trajectories}
+\end{figure}
 
-\subsection{Storytelling and Data Insights}
-% Summarize the "story" the data tells. What regions are most affected? How have trends changed over time?
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figure3_comparing_samples.png}
+    \caption{Comparison of Final Sampled Points: Direct Sampling (left) vs. Langevin Dynamics (right)}
+    \label{fig:compare_samples}
+\end{figure}
 
-\section{Task 3: Power BI Dashboard Improvement}
-This section details the enhancements made to the financial Power BI dashboard, focusing on advanced indicators and improved visual hierarchy.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figure4_convergence_of_langevin_samples.png}
+    \caption{Convergence Analysis: Average distance of samples from the origin over iterations}
+    \label{fig:convergence_distance}
+\end{figure}
 
-\subsection{Original vs. Enhanced Dashboard}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{img/powerbi_enhanced.png}
-%     \caption{Enhanced Financial Dashboard with improved KPIs and Layout}
-%     \label{fig:powerbi_enhanced}
-% \end{figure}
+\subsubsection*{Questions}
+\textbf{1. How does changing the step size affect convergence speed and stability of the sampler?} \\
+The step size ($\epsilon$) controls the balance between speed and stability. A larger step size allows particles to take larger strides toward the high-density regions, converging faster, but it risks overshooting the target distribution, leading to instability. Conversely, a smaller step size ensures stability but requires significantly more iterations to reach the stationary distribution.
 
-\subsection{Advanced Financial Indicators}
-% Detail the new metrics you introduced and why they add business value.
+\vspace{0.3cm}
+\textbf{2. How many iterations are required for the sampler to reach a stable distribution for your chosen step size? Explain how you determined this.} \\
+Based on the convergence plot (Figure \ref{fig:convergence_distance}), the sampler reaches a stable distribution after approximately 30 iterations. This was determined by observing the average distance of the particles from the origin. The distance drops rapidly during the initial phase and then levels off around iteration 30, where it begins to steadily oscillate.
 
-\subsection{Design and UX Improvements}
-% Explain what you changed visually to make the dashboard more readable.
+\vspace{0.3cm}
+\textbf{3. Compare the scatter plot with the density contours and explain why more samples appear near the origin.} \\
+The density contours represent the probability density function, which peaks at the origin (0,0) for our standard Gaussian. The samples cluster densely around this central point because the score function ($\nabla_{x}\log p(x)$) actively directs the particles toward regions of higher probability, pulling them inward from the edges.
 
-\section{Task 4: Data Visualization Principles}
-\subsection{Labeling: Clarity vs. Clutter}
-% Answer the prompt from page 13: Describe a scenario where labeling individual points is non-negotiable vs. when it becomes clutter.
+\vspace{0.3cm}
+\textbf{4. If you remove the noise term from the update rule, what behavior do you expect and why?} \\
+If the random noise term ($\sqrt{2\epsilon}z_{t}$) is removed, the update rule becomes purely deterministic, effectively turning into gradient ascent. Without the noise to disperse the particles, every particle would climb the probability gradient and permanently collapse exactly onto the origin (the mode). It would find the maximum probability point but fail to sample the variance of the distribution.
 
-\subsection{Cognitive Load and Visual Simplicity}
-% Answer the prompt from page 14: Identify a decluttering step that reduces cognitive load, referencing Gestalt Principles or the Data-Ink Ratio.
+\vspace{0.3cm}
+\textbf{5. Do all trajectories converge to similar regions of the space? What does this indicate about the sampler?} \\
+Yes, as shown in the trajectory plot, all particle trajectories converge toward the central region around the origin, but they continue to fluctuate within that area rather than converging to a single point. This indicates that the sampler is working correctly: it successfully navigates to the high-probability region while maintaining the natural variance expected from the target Gaussian distribution.
+
+\subsection{3. Inference from Samples}
+
+Based on the programmatic evaluation, we calculated the estimated means and variances for both sampling methods and compared them against the true target parameters ($\mu = [0, 0]$, $\text{Var} = [1, 1]$). The results of the 1000 generated samples are summarized in Table \ref{tab:inference}.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Metric} & \textbf{NumPy Direct Sampling} & \textbf{Langevin Dynamics} \\
+        \hline
+        Estimated Mean ($x_1, x_2$) & $[0.0548, 0.0109]$ & $[-0.0582, -0.0358]$ \\
+        Estimated Variance ($x_1, x_2$) & $[1.0085, 1.0462]$ & $[0.9567, 0.9897]$ \\
+        Absolute Mean Error & $[0.0548, 0.0109]$ & $[0.0582, 0.0358]$ \\
+        Absolute Variance Error & $[0.0085, 0.0462]$ & $[0.0433, 0.0103]$ \\
+        \hline
+    \end{tabular}
+    \caption{Inference parameters and absolute errors for both sampling methods.}
+    \label{tab:inference}
+\end{table}
+
+As seen in the results, Direct Sampling produced very low absolute errors because it draws exact, independent samples. Langevin Dynamics also approximated the parameters well, but showed slightly higher errors. This happens because the computer simulation must estimate the continuous paths using discrete, straight-line jumps, which introduces a small mathematical bias.
+
+\subsubsection*{Questions}
+
+\textbf{1. Why can the Langevin estimates still be biased even when the final samples come from independent chains?} \\
+The bias in Langevin dynamics is fundamentally caused by the step size (discretization error), not by a lack of samples. In a perfect mathematical model, the particles move in perfectly smooth, continuous curves. However, the computer forces the particles to take distinct, straight-line jumps. Because these jumps are straight, they slightly overshoot the true, curved shape of the distribution. Even if we run multiple completely independent chains (particles) to reduce random noise, every single chain is still forced to use this same flawed "straight-line" approximation. Therefore, their final results will always average out to a slightly distorted distribution.
+
+\vspace{0.3cm}
+\textbf{2. How do the number of iterations T and the step size $\epsilon$ affect the accuracy of the Langevin samples?} \\
+The accuracy relies on a trade-off between these two parameters:
+\begin{itemize}
+    \item \textbf{Number of iterations ($T$):} This determines how long the simulation runs. A larger $T$ is necessary to give the particles enough time to move away from their random starting locations (overcoming "burn-in") and fully explore the target distribution.
+    \item \textbf{Step size ($\epsilon$):} This controls the physical length of each jump. A smaller $\epsilon$ makes the straight-line jumps tiny, which allows them to trace the true curves of the distribution much more accurately (lower bias). However, taking tiny steps means the particles move very slowly across the space, so you are forced to use a much larger $T$ to give them enough time to explore. Conversely, a larger step size lets them explore faster, but increases the error because large jumps heavily overshoot the curves.
+\end{itemize}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
 
 \end{document}
