@@ -17,7 +17,7 @@
   Mohammad Hossein Mazaheri (810102585) \\
   Mohammad Reza Pirhadi (810102423)
 }
-\newcommand{\SNum}{Group Submission} % Overrides individual student number label
+\newcommand{\SNum}{Group Submission}
 \date{\today}
 
 \begin{document}
@@ -34,27 +34,36 @@
 This report outlines the findings and visualizations for Data Science Assignment 1. The project encompasses three primary practical tasks: statistical sampling and inference using 2D Gaussian distributions, storytelling through interactive Tableau dashboards for Global Tuberculosis data, and the visual improvement of a financial Power BI dashboard. The programmatic implementation for data processing and mathematical modeling can be found in the accompanying Jupyter Notebook.
 
 \section{Task 1: Sampling and Inference}
-This section visualizes the comparison between different sampling methods applied to a 2D Gaussian distribution.
 
-\subsection{Direct Sampling Visualization}
-% Insert your scatter plots or density plots from the Jupyter notebook here.
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.7\textwidth]{img/direct_sampling.png}
-%     \caption{Direct Sampling of the 2D Gaussian Distribution}
-%     \label{fig:direct_sample}
-% \end{figure}
+\subsection{1. Define and Visualize the Distribution}
 
-\subsection{Langevin Dynamics Sampling}
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.7\textwidth]{img/langevin_dynamics.png}
-%     \caption{Sampling generated via Langevin Dynamics}
-%     \label{fig:langevin_sample}
-% \end{figure}
+Figure \ref{fig:heatmap} displays the probability density function (PDF) of a standard 2D Gaussian distribution centered at the origin (0,0). The color intensity represents the probability density, with the darkest red region indicating the highest probability at the mean. The color fades outward in a perfectly uniform gradient as the probability density approaches zero at the tails of the distribution.
 
-\subsection{Comparative Analysis}
-% Discuss the differences in the visual spread, convergence, or accuracy between the two methods here.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{assets/images/figure1_heatmap.png}
+    \caption{Heatmap of the 2D Gaussian target distribution ($\mu=[0,0]$, $\Sigma=I$)}
+    \label{fig:heatmap}
+\end{figure}
+
+\subsubsection*{Theoretical Questions}
+
+\textbf{1. Why is the distribution symmetric?} \\
+The distribution is symmetric because the covariance matrix is the Identity matrix ($I$). This means the variance along both the $x_1$ and $x_2$ axes is identically equal to 1, and the variables are completely independent (their covariance is 0). Because the spread is equal in all directions and there is no correlation skewing the data, the probability density depends purely on the Euclidean distance from the mean, resulting in perfect circular (radial) symmetry.
+
+\vspace{0.5cm}
+
+\textbf{2. What role does the covariance matrix play in the shape of the distribution?} \\
+The covariance matrix completely dictates the spatial spread, shape, and orientation of the Gaussian distribution:
+\begin{itemize}
+    \item The \textbf{diagonal elements (variances)} control the width or spread of the distribution along each individual axis.
+    \item The \textbf{off-diagonal elements (covariances)} control the linear correlation between the variables, which determines the "tilt" or rotation of the distribution.
+\end{itemize}
+In our specific case, because the off-diagonal elements are exactly zero and the diagonal elements are equal, the distribution has no tilt and forms a perfect circle rather than an elongated ellipse.
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
 
 \section{Task 2: Tableau Dashboard Storytelling}
 This section presents the interactive dashboards created to analyze the Global Tuberculosis Burden.
