@@ -4,7 +4,7 @@
 \input{setting.tex}
 
 \geometry{a4paper, margin=1in}
-\graphicspath{{assests/images/}}
+\graphicspath{{assets/images/}} % Ensure the path is correct
 
 % --- Document Info ---
 \newcommand{\CourseName}{Introduction to Data Science}
@@ -17,7 +17,7 @@
   Mohammad Hossein Mazaheri (810102585) \\
   Mohammad Reza Pirhadi (810102423)
 }
-\newcommand{\SNum}{Group Submission} % Overrides individual student number label
+\newcommand{\SNum}{Group Submission} 
 \date{\today}
 
 \begin{document}
@@ -37,10 +37,9 @@ This report outlines the findings and visualizations for Data Science Assignment
 This section visualizes the comparison between different sampling methods applied to a 2D Gaussian distribution.
 
 \subsection{Direct Sampling Visualization}
-% Insert your scatter plots or density plots from the Jupyter notebook here.
 % \begin{figure}[H]
 %     \centering
-%     \includegraphics[width=0.7\textwidth]{img/direct_sampling.png}
+%     \includegraphics[width=0.7\textwidth]{direct_sampling.png}
 %     \caption{Direct Sampling of the 2D Gaussian Distribution}
 %     \label{fig:direct_sample}
 % \end{figure}
@@ -48,13 +47,17 @@ This section visualizes the comparison between different sampling methods applie
 \subsection{Langevin Dynamics Sampling}
 % \begin{figure}[H]
 %     \centering
-%     \includegraphics[width=0.7\textwidth]{img/langevin_dynamics.png}
+%     \includegraphics[width=0.7\textwidth]{langevin_dynamics.png}
 %     \caption{Sampling generated via Langevin Dynamics}
 %     \label{fig:langevin_sample}
 % \end{figure}
 
 \subsection{Comparative Analysis}
-% Discuss the differences in the visual spread, convergence, or accuracy between the two methods here.
+The two sampling methods exhibit distinct mathematical and visual characteristics in how they explore the 2D Gaussian distribution. 
+
+\textbf{Direct Sampling} generates independent and identically distributed (i.i.d) points, providing an unbiased and exact representation of the target distribution from the first draw. Visually, the points scatter uniformly according to the probability density without any sequential dependency. It is highly efficient for standard distributions where the inverse CDF or Box-Muller transform is mathematically derivable.
+
+In contrast, \textbf{Langevin Dynamics} is a gradient-based Markov Chain Monte Carlo (MCMC) method. Its samples are sequentially correlated, taking the form of a random walk guided by the gradient of the log-probability (the drift term) combined with injected Gaussian noise. While Direct Sampling is instant and exact for simple cases, Langevin Dynamics is far more powerful and scalable for complex, unnormalized, or high-dimensional energy-based models. Visually, Langevin sampling may display a sequential "burn-in" trajectory before fully covering the high-density regions of the Gaussian contour, illustrating its exploratory nature.
 
 \section{Task 2: Tableau Dashboard Storytelling}
 This section presents the interactive dashboards created to analyze the Global Tuberculosis Burden.
@@ -62,7 +65,7 @@ This section presents the interactive dashboards created to analyze the Global T
 \subsection{Global TB Overview \& Maps}
 % \begin{figure}[H]
 %     \centering
-%     \includegraphics[width=0.9\textwidth]{img/tableau_map.png}
+%     \includegraphics[width=0.9\textwidth]{tableau_map.png}
 %     \caption{Global Overview and Geographic Distribution of TB Cases}
 %     \label{fig:tableau_map}
 % \end{figure}
@@ -74,27 +77,66 @@ This section presents the interactive dashboards created to analyze the Global T
 % Summarize the "story" the data tells. What regions are most affected? How have trends changed over time?
 
 \section{Task 3: Power BI Dashboard Improvement}
-This section details the enhancements made to the financial Power BI dashboard, focusing on advanced indicators and improved visual hierarchy.
+This section details the enhancements made to the initial financial Power BI dashboard, transforming it from a raw data presentation into a professional, analytical tool focused on the correlation between stock prices, volatility, and news frequency.
+
+\subsection{Purpose \& Audience}
+The primary audience for this dashboard includes financial analysts, portfolio managers, and corporate executives who require a macro-level view of the asset's performance. The enhanced dashboard aims to answer critical business questions, such as:
+\begin{itemize}
+    \item How do official corporate disclosures (Codal news) impact stock price volatility and trading volume?
+    \item What is the short-term trend and 30-day rolling return of the asset?
+    \item Is the stock currently trading in an overbought or oversold territory based on technical indicators?
+    \item What is the maximum historical downside risk (drawdown)?
+\end{itemize}
+
+\subsection{Initial Weakness Identification}
+Prior to the redesign, an in-depth audit of the initial dashboard revealed several critical limitations and performance issues:
+\begin{itemize}
+    \item \textbf{Design Intuitiveness \& Visual Clutter:} The original design utilized overlapping dual axes for price and news events, leading to crossed lines and severe visual clutter. Furthermore, the news metric acted as a binary switch, causing erratic, non-continuous jumps on the line chart.
+    \item \textbf{Missing Analytical Elements:} The dashboard lacked standard financial benchmarks common in market analysis. There were no risk assessment tools, no smoothed trend lines (Moving Averages), and no context for market momentum (RSI states).
+    \item \textbf{Performance \& Modeling Issues:} The data model suffered from Circular Dependency errors due to the improper use of calculated columns for time-intelligence operations, which locked row contexts and degraded dashboard performance.
+\end{itemize}
 
 \subsection{Original vs. Enhanced Dashboard}
+To resolve these weaknesses, we restructured the layout by introducing a centralized KPI ribbon at the top and separating mixed metrics into distinct, readable charts to better analyze the \texttt{khodro\_final\_daily} dataset.
+
 % \begin{figure}[H]
 %     \centering
-%     \includegraphics[width=0.9\textwidth]{img/powerbi_enhanced.png}
+%     \includegraphics[width=0.9\textwidth]{powerbi_enhanced.png}
 %     \caption{Enhanced Financial Dashboard with improved KPIs and Layout}
 %     \label{fig:powerbi_enhanced}
 % \end{figure}
 
-\subsection{Advanced Financial Indicators}
-% Detail the new metrics you introduced and why they add business value.
+\subsection{DAX Measures \& Technical Implementation}
+To elevate the analytical depth and resolve performance bottlenecks, we migrated calculations from static columns to dynamic DAX measures. For every measure used, the DAX code was engineered to respect the filter context of the calendar table (\texttt{Dim\_Date}):
+
+\begin{itemize}
+    \item \textbf{Simple Moving Average (\texttt{SMA\_15}):} Calculated using \texttt{AVERAGEX} combined with \texttt{DATESINPERIOD} to create a rolling 15-day average. This allows for clear trend identification and filters out daily market noise.
+    \item \textbf{Price Distance Percentage (\texttt{Price\_Distance\_Pct}):} Evaluated as the deviation of the current close price from the \texttt{SMA\_15}. This acts as a proxy for identifying over-extended price movements, effectively bypassing the circular dependency errors of the original model.
+    \item \textbf{Continuous Rolling Return (\texttt{Return 30D Continuous}):} Implemented using \texttt{CALCULATE} and \texttt{DATEADD} functions to fetch the close price exactly 30 days prior, reflecting a dynamic monthly profitability trend.
+    \item \textbf{Volatility and Technical Analysis:} Integrated the \texttt{Volatility\_30D} metric into an area chart to visualize risk. Additionally, we utilized the \texttt{RSI} column alongside conditional flags (e.g., \texttt{RSI\_above\_80}, \texttt{RSI\_below\_20}) to map market states (Overbought/Oversold).
+    \item \textbf{News Impact Analysis (\texttt{News Highlight}):} Instead of plotting news events directly over the price, the DAX measure was strategically integrated to correlate high trading volumes with the release of Codal reports using Tooltips.
+\end{itemize}
 
 \subsection{Design and UX Improvements}
-% Explain what you changed visually to make the dashboard more readable.
+We addressed the UI/UX flaws by applying data visualization best practices:
+\begin{enumerate}
+    \item \textbf{Elimination of Dual Axes:} The \texttt{News Highlight} metric was separated from the main price chart's secondary Y-axis, preventing line crossover and user confusion.
+    \item \textbf{Gestalt Principle of Proximity:} Related analytical KPIs (Current Price, \texttt{Return 30D Continuous}, and \texttt{Price\_Distance\_Pct}) were grouped in a single horizontal ribbon at the top. This unified visual grouping allows stakeholders to scan core performance metrics instantly.
+    \item \textbf{Data-Ink Ratio Optimization:} We removed heavy gridlines and redundant data labels from the volatility and distance charts, forcing the user's focus purely on the signal (the trend lines) rather than the noise (the background grid).
+\end{enumerate}
 
 \section{Task 4: Data Visualization Principles}
+
 \subsection{Labeling: Clarity vs. Clutter}
-% Answer the prompt from page 13: Describe a scenario where labeling individual points is non-negotiable vs. when it becomes clutter.
+Labeling individual data points becomes \textbf{non-negotiable} in scenarios where absolute precision is required for decision-making and the dataset is relatively small. For instance, in a bar chart presenting the exact quarterly revenue of four regional branches to stakeholders, data labels are essential because the audience needs to see the exact financial figures, not just a visual approximation.
+
+Conversely, labeling becomes \textbf{clutter} in dense visualizations, such as a scatter plot containing thousands of data points showing the correlation between trading volume and stock returns. In this scenario, labeling each point would create an overlapping, illegible mass of text. The primary goal of such a chart is to reveal overall trends, density, and outliers. Using interactive tooltips for on-demand details and relying on clean axes to convey scale is vastly superior to static labeling.
 
 \subsection{Cognitive Load and Visual Simplicity}
-% Answer the prompt from page 14: Identify a decluttering step that reduces cognitive load, referencing Gestalt Principles or the Data-Ink Ratio.
+One critical decluttering step taken in the Power BI dashboard was the \textbf{removal of heavy background gridlines and redundant data labels} from the volatility and price trend charts. 
+
+According to Edward Tufte's concept of the \textbf{Data-Ink Ratio}, every drop of ink on a graphic should present data; non-data ink (like gridlines) should be erased to minimize cognitive load. By removing these distractions, the user's brain requires less processing power to separate the signal (the actual financial trend) from the noise (the background grid). 
+
+Furthermore, by placing the four key financial metrics (Current Price, MA Distance, Return 30D, and Max Drawdown) closely together in a unified top ribbon, we leveraged the \textbf{Gestalt Principle of Proximity}. This visual grouping inherently signals to the user that these metrics belong to the same category of high-level summaries, significantly reducing the cognitive effort required to navigate and interpret the dashboard.
 
 \end{document}
