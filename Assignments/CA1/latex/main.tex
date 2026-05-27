@@ -431,6 +431,15 @@ To make the dashboard easy to read, we used standard design rules:
 \section{Task 3: Power BI Dashboard Improvement}
 This section details the enhancements made to the initial financial Power BI dashboard, transforming it from a raw data presentation into a professional, analytical tool focused on the correlation between stock prices, volatility, and news frequency.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{image1.png}
+    \caption{Power BI Dashboard — Task 3 Overview}
+    \label{fig:task3-dashboard}
+\end{figure}
+
+We implemented several DAX measures to resolve model dependencies and improve analytical clarity:
+
 \subsection{Purpose \& Audience}
 The primary audience for this dashboard includes financial analysts, portfolio managers, and corporate executives who require a macro-level view of the asset's performance. The enhanced dashboard aims to answer critical business questions, such as:
 \begin{itemize}
@@ -462,12 +471,32 @@ To resolve these weaknesses, we restructured the layout by introducing a central
 To elevate the analytical depth and resolve performance bottlenecks, we migrated calculations from static columns to dynamic DAX measures. For every measure used, the DAX code was engineered to respect the filter context of the calendar table (\texttt{Dim\_Date}):
 
 \begin{itemize}
-    \item \textbf{Simple Moving Average (\texttt{SMA\_15}):} Calculated using \texttt{AVERAGEX} combined with \texttt{DATESINPERIOD} to create a rolling 15-day average. This allows for clear trend identification and filters out daily market noise.
-    \item \textbf{Price Distance Percentage (\texttt{Price\_Distance\_Pct}):} Evaluated as the deviation of the current close price from the \texttt{SMA\_15}. This acts as a proxy for identifying over-extended price movements, effectively bypassing the circular dependency errors of the original model.
-    \item \textbf{Continuous Rolling Return (\texttt{Return 30D Continuous}):} Implemented using \texttt{CALCULATE} and \texttt{DATEADD} functions to fetch the close price exactly 30 days prior, reflecting a dynamic monthly profitability trend.
-    \item \textbf{Volatility and Technical Analysis:} Integrated the \texttt{Volatility\_30D} metric into an area chart to visualize risk. Additionally, we utilized the \texttt{RSI} column alongside conditional flags (e.g., \texttt{RSI\_above\_80}, \texttt{RSI\_below\_20}) to map market states (Overbought/Oversold).
-    \item \textbf{News Impact Analysis (\texttt{News Highlight}):} Instead of plotting news events directly over the price, the DAX measure was strategically integrated to correlate high trading volumes with the release of Codal reports using Tooltips.
+    \item \textbf{Simple Moving Average (\texttt{SMA\_15}):} We Calculated using
+    \texttt{AVERAGEX} combined with \texttt{DATESINPERIOD} to create a
+    rolling 15-day average, enabling clear trend identification and
+    filtering out daily market noise.
+
+
+    \item \textbf{Price Distance Percentage (\texttt{Price\_Distance\_Pct}):}
+    Measures the deviation of the current close price from \texttt{SMA\_15},
+    acting as a proxy for over-extended price movements and bypassing the
+    circular dependency errors of the original model.
+
+    \item \textbf{Continuous Rolling Return (\texttt{Return 30D Continuous}):}
+    Implemented via \texttt{CALCULATE} and \texttt{DATEADD} to fetch the close
+    price exactly 30 days prior, reflecting a dynamic monthly profitability
+    trend.
+
+    \item \textbf{Volatility and Technical Analysis:} The \texttt{Volatility\_30D}
+    metric is visualized in an area chart for risk assessment. Conditional flags
+    (\texttt{RSI\_above\_80}, \texttt{RSI\_below\_20}) map market states to
+    Overbought and Oversold zones.
+
+    \item \textbf{News Impact Analysis (\texttt{News Highlight}):} Rather than
+    overlaying news events on the price chart, the DAX measure correlates high
+    trading volumes with Codal report releases via Tooltips.
 \end{itemize}
+
 
 \subsection{Design and UX Improvements}
 We addressed the UI/UX flaws by applying data visualization best practices:
@@ -479,16 +508,39 @@ We addressed the UI/UX flaws by applying data visualization best practices:
 
 \section{Task 4: Data Visualization Principles}
 
-\subsection{Labeling: Clarity vs. Clutter}
-Labeling individual data points becomes \textbf{non-negotiable} in scenarios where absolute precision is required for decision-making and the dataset is relatively small. For instance, in a bar chart presenting the exact quarterly revenue of four regional branches to stakeholders, data labels are essential because the audience needs to see the exact financial figures, not just a visual approximation.
+\subsection{Question 1: Labeling Over-utilization vs. Non-negotiable Necessity}
+The borderline between essential clarity and destructive visual clutter depends entirely on data density and presentation purpose. Labeling individual points becomes \textbf{non-negotiable} when the dataset is small, non-continuous, and exact values are vital for critical compliance or localized decision-making. 
+Conversely, static labels turn into \textbf{visual noise/clutter} when dealing with high-density datasets or multi-series continuous line charts. In dense charts, text marks overlap, making it impossible to read values or see the structural trends underneath.
 
-Conversely, labeling becomes \textbf{clutter} in dense visualizations, such as a scatter plot containing thousands of data points showing the correlation between trading volume and stock returns. In this scenario, labeling each point would create an overlapping, illegible mass of text. The primary goal of such a chart is to reveal overall trends, density, and outliers. Using interactive tooltips for on-demand details and relying on clean axes to convey scale is vastly superior to static labeling.
+\subsection{Question 2: Contextualizing Clarity: Crucial vs.\ Redundant Marks}
+\begin{itemize}
+    \item \textbf{Crucial Labeling Context:} Direct values are essential in
+    discrete executive-level summaries. For example, a bar chart of quarterly
+    conversion rates across three sales teams requires exact figures
+    (\textit{e.g.,} 78.4\% vs.\ 79.1\%) so executives can compare performance
+    without tracing lines to the Y-axis.
 
-\subsection{Cognitive Load and Visual Simplicity}
-One critical decluttering step taken in the Power BI dashboard was the \textbf{removal of heavy background gridlines and redundant data labels} from the volatility and price trend charts. 
+    \item \textbf{Cluttering Context:} Labels become redundant in a continuous
+    time-series chart spanning multiple years with hundreds of data points.
+    The goal there is to show macro-level trends and volatility, not
+    individual values.
+\end{itemize}
 
-According to Edward Tufte's concept of the \textbf{Data-Ink Ratio}, every drop of ink on a graphic should present data; non-data ink (like gridlines) should be erased to minimize cognitive load. By removing these distractions, the user's brain requires less processing power to separate the signal (the actual financial trend) from the noise (the background grid). 
 
-Furthermore, by placing the four key financial metrics (Current Price, MA Distance, Return 30D, and Max Drawdown) closely together in a unified top ribbon, we leveraged the \textbf{Gestalt Principle of Proximity}. This visual grouping inherently signals to the user that these metrics belong to the same category of high-level summaries, significantly reducing the cognitive effort required to navigate and interpret the dashboard.
+\subsection{Question 3: Scenario Selection for No-Label Configurations}
+A classic scenario where individual point labeling should be strictly avoided is a \textbf{dense Scatter Plot} mapping trading volume against stock volatility over a 5-year horizon (thousands of points). Labeling each node would completely fill the visual field with overlapping text boxes. The strategic layout requires using clean spatial positioning to highlight clusters and outliers, reserving exact metrics exclusively for interactive tooltips on hover.
+
+\subsection{Question 4: Scenario Selection for Non-Negotiable Labeling}
+Direct labeling is completely \textbf{non-negotiable} in high-stakes operational reporting, such as a dashboard tracking a hospital's current emergency room capacity or critical server CPU load levels. When an metric reaches an anomaly or boundary threshold (e.g., 94\% capacity), the absolute value must be printed explicitly in bold red. Relying on an axis or a hidden tooltip introduces dangerous latency in interpretation when instant action is required.
+
+\subsection{Question 5: Cognitive Load Minimization Strategy}
+The visual modification that yields the most substantial reduction in a viewer's cognitive load is the \textbf{elimination of heavy background grids and chart borders}, combined with the removal of secondary dual Y-axes. 
+
+According to Edward Tufte's fundamental formulation of the \textbf{Data-Ink Ratio}, a graphic's efficiency increases as the proportion of ink used to display non-redundant data approach 1.0. Background grids and dual axes constitute non-data ink that consumes significant mental bandwidth. Eliminating this structural noise allows the viewer's pre-attentive processing mechanisms to map the trend data instantly, drastically reducing the psychological latency required to comprehend the primary analytical insight.
+
+\subsection{Question 6: Gestalt Applications in Structural Simplicity}
+The structural enhancement of the dashboard layout directly applies the \textbf{Gestalt Principle of Proximity} and the \textbf{Principle of Continuity}. By grouping critical financial health metrics (\texttt{Close}, \texttt{SMA\_15}, \texttt{Price\_Distance\_Pct}, and \texttt{Return 30D Continuous}) tightly inside a uniform top horizontal ribbon, the human mind instinctively organizes them into a single functional semantic group. 
+
+Furthermore, by utilizing the \textbf{Principle of Continuity}, the transition from a jagged, binary highlight mechanism to a smoothed continuous 15-day Simple Moving Average allows the eye to follow a steady visual path. Minimizing structural noise ensures that the brain doesn't waste energy filtering out graphical artifacts, accelerating both the speed and accuracy of trend perception.
 
 \end{document}
