@@ -6,19 +6,51 @@
 \geometry{a4paper, margin=1in}
 \graphicspath{{assets/images/}}
 
-% --- Document Info ---
+% Document Info
 \newcommand{\CourseName}{Introduction to Data Science}
 \newcommand{\assignNum}{1}
 \title{Assignment \assignNum}
 
 % Group Members Configuration
 \author{
+  \begin{tabular}{c}
   Parsa Saeednia (810102460) \\
   Mohammad Hossein Mazaheri (810102585) \\
   Mohammad Reza Pirhadi (810102423)
+  \end{tabular}
 }
-\newcommand{\SNum}{Group Submission}
 \date{\today}
+
+\makeatletter
+\def\maketitle{
+  \begin{center}
+    \begin{tabular}{ p{3cm} p{7cm} p{3.5cm} }
+      \includegraphics[width=3cm]{assets/images/logo.png} &
+      \vspace{-3cm}
+      \begin{center}
+        {\sixteenpt{\textbf{University of Tehran}}\\[0.2cm]
+        \sixteenpt{\textbf{College of Engineering}}\\[0.2cm]
+        \sixteenpt{\textbf{Department of Electrical and Computer Engineering}}}
+      \end{center}
+      &
+      \includegraphics[width=3.5cm]{assets/images/eng-logo.png} 
+    \end{tabular}
+
+    \vspace{4cm}
+    {\twentyeightpt \textbf{\CourseName}} \\
+    \vspace{0.5cm}
+    {\twentytwopt \textbf{\@title}} \\
+    \vspace{2cm}
+    {\eighteenpt \textbf{Instructors: Dr. Bahrak, Dr. Yaghoobzadeh}} \\
+    \vspace{2cm}
+    {\sixteenpt \textbf{Prepared by (Group Submission):}} \\
+    \vspace{0.5cm}
+    {\eighteenpt \textbf{\@author}} \\
+    \vfill
+    {\sixteenpt \@date}
+  \end{center}
+}
+\makeatother
 
 \begin{document}
 \pagenumbering{gobble}
