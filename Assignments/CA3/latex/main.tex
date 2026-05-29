@@ -1,0 +1,110 @@
+% !TEX TS-program = xelatex
+
+\documentclass[a4paper,12pt]{extarticle}
+\input{setting.tex}
+
+\geometry{a4paper, margin=1in}
+\graphicspath{{assets/images/}}
+
+% Document Info
+\newcommand{\CourseName}{Introduction to Data Science}
+\newcommand{\assignNum}{3}
+\title{Assignment \assignNum}
+
+% Group Members Configuration
+\author{
+  \begin{tabular}{c}
+  Parsa Saeednia (810102460) \\
+  Mohammad Hossein Mazaheri (810102585) \\
+  Mohammad Reza Pirhadi (810102423)
+  \end{tabular}
+}
+\date{\today}
+
+\makeatletter
+\def\maketitle{
+  \begin{center}
+    \begin{tabular}{ p{3cm} p{7cm} p{3.5cm} }
+      \includegraphics[width=3cm]{assets/images/logo.png} &
+      \vspace{-3cm}
+      \begin{center}
+        {\sixteenpt{\textbf{University of Tehran}}\\[0.2cm]
+        \sixteenpt{\textbf{College of Engineering}}\\[0.2cm]
+        \sixteenpt{\textbf{Department of Electrical and Computer Engineering}}}
+      \end{center}
+      &
+      \includegraphics[width=3.5cm]{assets/images/eng-logo.png} 
+    \end{tabular}
+
+    \vspace{4cm}
+    {\twentyeightpt \textbf{\CourseName}} \\
+    \vspace{0.5cm}
+    {\twentytwopt \textbf{\@title}} \\
+    \vspace{2cm}
+    {\eighteenpt \textbf{Instructors: Dr. Bahrak, Dr. Yaghoobzadeh}} \\
+    \vspace{2cm}
+    {\sixteenpt \textbf{Prepared by (Group Submission):}} \\
+    \vspace{0.5cm}
+    {\eighteenpt \textbf{\@author}} \\
+    \vfill
+    {\sixteenpt \@date}
+  \end{center}
+}
+\makeatother
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\pagenumbering{arabic}
+
+\section{Introduction}
+This report presents our solutions for Assignment 3 of the Introduction to Data Science course. The assignment consists of three practical machine learning problems that cover different aspects of data science workflow: fraud detection, article share prediction, and candidate ranking.
+
+Each task requires a complete ML pipeline including data analysis, preprocessing, feature engineering, model selection, and evaluation. We are restricted to traditional machine learning methods, with deep learning models, pre-trained models, and AutoML tools explicitly prohibited.
+
+\section{Problem Description}
+
+\subsection{Task 1: Fraud Detection (Classification)}
+The first task involves building a classification model to predict whether a retail transaction is fraudulent. The dataset contains transaction information, and careful feature engineering is required to avoid data leakage. All features must be computed using only information available before the target event.
+
+\subsection{Task 2: Article Share Prediction}
+The second task focuses on predicting the number of shares an article will receive. This is a regression problem that requires understanding the relationship between article characteristics and their popularity.
+
+\subsection{Task 3: Candidate Ranking}
+The third task involves ranking candidates for job positions. This requires developing a model that can effectively evaluate and order candidates based on their qualifications and fit for the role.
+
+\section{Methodology}
+
+\subsection{Data Analysis}
+We performed exploratory data analysis (EDA) for each dataset to understand the distribution of features, identify missing values, detect outliers, and discover patterns relevant to each task.
+
+\subsection{Preprocessing}
+Data preprocessing steps included handling missing values, encoding categorical variables, scaling numerical features, and addressing class imbalance where applicable.
+
+\subsection{Feature Engineering}
+For each task, we engineered domain-specific features to improve model performance while carefully avoiding data leakage, especially in the fraud detection task.
+
+\subsection{Model Selection}
+We experimented with various traditional machine learning algorithms including logistic regression, decision trees, random forests, gradient boosting machines, and support vector machines. Model selection was based on cross-validation performance using appropriate metrics for each task.
+
+\subsection{Evaluation}
+Each model was evaluated using task-appropriate metrics. We used stratified cross-validation to ensure robust performance estimates and prevent overfitting.
+
+\section{Implementation}
+
+% This section will be filled later with implementation details
+
+\section{Results}
+
+% Results will be added after implementation
+
+\section{Conclusion}
+
+% Conclusion will be added after completing the analysis
+
+\end{document}
