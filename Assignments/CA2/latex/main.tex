@@ -1,0 +1,245 @@
+% !TEX TS-program = xelatex
+
+\documentclass[a4paper,12pt]{extarticle}
+\input{setting.tex}
+
+\geometry{a4paper, margin=1in}
+\graphicspath{{assets/images/}}
+
+% Document Info
+\newcommand{\CourseName}{Introduction to Data Science}
+\newcommand{\assignNum}{1}
+\title{Assignment \assignNum}
+
+% Group Members Configuration
+\author{
+  \begin{tabular}{c}
+  Parsa Saeednia (810102460) \\
+  Mohammad Hossein Mazaheri (810102585) \\
+  Mohammad Reza Pirhadi (810102423)
+  \end{tabular}
+}
+\date{\today}
+
+\makeatletter
+\def\maketitle{
+  \begin{center}
+    \begin{tabular}{ p{3cm} p{7cm} p{3.5cm} }
+      \includegraphics[width=3cm]{assets/images/logo.png} &
+      \vspace{-3cm}
+      \begin{center}
+        {\sixteenpt{\textbf{University of Tehran}}\\[0.2cm]
+        \sixteenpt{\textbf{College of Engineering}}\\[0.2cm]
+        \sixteenpt{\textbf{Department of Electrical and Computer Engineering}}}
+      \end{center}
+      &
+      \includegraphics[width=3.5cm]{assets/images/eng-logo.png} 
+    \end{tabular}
+
+    \vspace{4cm}
+    {\twentyeightpt \textbf{\CourseName}} \\
+    \vspace{0.5cm}
+    {\twentytwopt \textbf{\@title}} \\
+    \vspace{2cm}
+    {\eighteenpt \textbf{Instructors: Dr. Bahrak, Dr. Yaghoobzadeh}} \\
+    \vspace{2cm}
+    {\sixteenpt \textbf{Prepared by (Group Submission):}} \\
+    \vspace{0.5cm}
+    {\eighteenpt \textbf{\@author}} \\
+    \vfill
+    {\sixteenpt \@date}
+  \end{center}
+}
+\makeatother
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\pagenumbering{arabic}
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+This report presents the implementation of \textbf{Ashpaz}, a real-time food ordering and
+delivery platform developed as part of Assignment 2 for the Introduction to Data Science
+course. The project is structured around three interconnected layers that together form a
+complete data engineering pipeline.
+
+The first layer (\textbf{Q1}) focuses on relational database design and analytics. Using the
+Zomato restaurant dataset, we normalize a flat CSV file into a structured schema, load the
+data, and answer business-critical queries covering delivery statistics, pricing tiers, and
+neighborhood performance.
+
+The second layer (\textbf{Q2}) introduces \textbf{Apache Kafka} as a distributed messaging
+backbone. A Kafka consumer reads from the \texttt{ashpaz.order} topic, performs stateless
+validation on each incoming order event, and routes messages to either \texttt{ashpaz.valid}
+or \texttt{ashpaz.error\_log} depending on data quality. This section also addresses key
+theoretical questions on Kafka's architecture, stateless vs.\ stateful processing, and the
+distributed commit log model.
+
+The third layer (\textbf{Q3}) implements a \textbf{PySpark} processing layer with both batch
+and real-time components. The batch jobs analyze historical order data for revenue insights
+and peak-hour patterns, while the streaming application connects to the Kafka consumer and
+performs windowed micro-batch aggregations with checkpoint-based fault tolerance.
+
+The data generator (\texttt{Ashpaz.py}) simulates realistic order traffic — including
+intentional noise such as invalid phone numbers, price anomalies, and spam user behavior —
+providing a robust test environment for the entire pipeline.
+
+% ============================================================
+\section{Q1: Database Design and Analytics (100 pts)}
+% ============================================================
+
+% ------------------------------------------------------------
+\subsection{Database Design (30 pts)}
+% ------------------------------------------------------------
+
+% TODO: Present the normalized schema (minimum 3 tables).
+% Include: table definitions, data types, PKs, FKs, and
+% relationship types (1-to-Many, Many-to-Many).
+% Write the CREATE TABLE SQL statements here.
+
+\textit{[Placeholder — Database Design]}
+
+% ------------------------------------------------------------
+\subsection{Data Loading (10 pts)}
+% ------------------------------------------------------------
+
+% TODO: Write the conceptual SQL script that loads data from
+% the raw zomato.csv into the designed relational schema.
+
+\textit{[Placeholder — Data Loading]}
+
+% ------------------------------------------------------------
+\subsection{Business Analytics Queries (60 pts)}
+% ------------------------------------------------------------
+
+% TODO: Provide the four optimized SQL queries:
+%   Q1.1 — Total restaurants and avg cost for "Delivery" type
+%   Q1.2 — Impact of online_order on approx_cost and votes by city
+%   Q1.3 — Top neighborhoods with avg(rate) > 4.2 and >= 50 restaurants
+%   Q1.4 — Pricing tier dashboard (Budget / Mid-Range / Premium) by city
+
+\textit{[Placeholder — Business Analytics Queries]}
+
+% ============================================================
+\section{Q2: Kafka Consumer Implementation (100 pts)}
+% ============================================================
+
+% ------------------------------------------------------------
+\subsection{Implementation}
+% ------------------------------------------------------------
+
+% TODO: Describe and present the Kafka consumer code.
+% Cover: connecting to Kafka, reading from ashpaz.order,
+% stateless validation logic, and routing to
+% ashpaz.valid or ashpaz.error_log.
+
+\textit{[Placeholder — Kafka Consumer Implementation]}
+
+% ------------------------------------------------------------
+\subsection{Theoretical Questions}
+% ------------------------------------------------------------
+
+\subsubsection{Kafka vs.\ Relational Databases}
+
+% TODO: Compare Kafka and relational databases across:
+% performance, scalability, access patterns, real-time
+% suitability, and when a relational DB is the better choice.
+
+\textit{[Placeholder — Kafka vs.\ Relational Databases]}
+
+\subsubsection{Stateless vs.\ Stateful Processing}
+
+% TODO: Explain the difference between stateless and stateful
+% processing, why stateless is preferred for ingestion,
+% and the risks of state-dependency.
+
+\textit{[Placeholder — Stateless vs.\ Stateful Processing]}
+
+\subsubsection{Kafka as a Distributed Commit Log}
+
+% TODO: Explain how Kafka's commit log model enables message
+% replay, independent consumers, and fault tolerance.
+
+\textit{[Placeholder — Distributed Commit Log]}
+
+% ============================================================
+\section{Q3: PySpark Processing Layer (100 pts)}
+% ============================================================
+
+% ------------------------------------------------------------
+\subsection{Batch Processing Layer (50 pts)}
+% ------------------------------------------------------------
+
+\subsubsection{Revenue and Menu Analysis Batch Job (15 pts)}
+
+% TODO — Top Ordered Items:
+%   Extract and count individual elements in the items arrays.
+%   Rank the most frequently ordered food items across all restaurants.
+
+% TODO — Highest Revenue Restaurants:
+%   Aggregate total order_price grouped by restaurant_id and restaurant_name.
+%   Identify top-performing restaurants by total earnings.
+
+% TODO — Order Channel Leaders (Online vs.\ Dine-In):
+%   Count orders where request_online = true and request_table = true
+%   per restaurant_id. Compare delivery vs.\ dine-in dominance.
+
+\textit{[Placeholder — Revenue and Menu Analysis Batch Job]}
+
+\subsubsection{Order Time \& Peak Hour Analysis (20 pts)}
+
+% TODO — Hourly Order Patterns:
+%   Extract hour from order_time, group by hour,
+%   calculate total order volume across a 24-hour cycle.
+
+% TODO — Peak and Off-Peak Identification:
+%   Analyze hourly volumes to identify most and least crowded hours.
+%   Discuss daily demand spikes and drops.
+
+\textit{[Placeholder — Order Time \& Peak Hour Analysis]}
+
+% ------------------------------------------------------------
+\subsection{Real-Time Processing Layer (50 pts)}
+% ------------------------------------------------------------
+
+\subsubsection{Spark Streaming Application}
+
+% TODO: Describe the Spark Structured Streaming setup.
+% Cover: connecting to the Kafka consumer output,
+% schema definition, and stream initialization.
+
+\textit{[Placeholder — Spark Streaming Application]}
+
+\subsubsection{Micro-batch and Windowed Processing}
+
+% TODO: Implement and explain the windowed aggregation.
+% Example: 1-minute window with 20-second slide interval.
+
+\textit{[Placeholder — Micro-batch and Windowed Processing]}
+
+\subsubsection{Checkpoint Mechanism for Fault Tolerance}
+
+% TODO: Explain and show the checkpoint configuration
+% used to ensure exactly-once or at-least-once semantics
+% and recovery from failures.
+
+\textit{[Placeholder — Checkpoint Mechanism]}
+
+% ============================================================
+\section{Conclusion}
+% ============================================================
+
+% TODO: Summarize findings across all three tasks.
+% Reflect on the pipeline as a whole and lessons learned.
+
+\textit{[Placeholder — Conclusion]}
+
+\end{document}
