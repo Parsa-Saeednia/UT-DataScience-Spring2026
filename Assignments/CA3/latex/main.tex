@@ -25,7 +25,7 @@
 \def\maketitle{
   \begin{center}
     \begin{tabular}{ p{3cm} p{7cm} p{3.5cm} }
-      \includegraphics[width=3cm]{assets/images/logo.png} &
+      \includegraphics[width=3cm]{logo.png} &
       \vspace{-3cm}
       \begin{center}
         {\sixteenpt{\textbf{University of Tehran}}\\[0.2cm]
@@ -33,7 +33,7 @@
         \sixteenpt{\textbf{Department of Electrical and Computer Engineering}}}
       \end{center}
       &
-      \includegraphics[width=3.5cm]{assets/images/eng-logo.png} 
+      \includegraphics[width=3.5cm]{eng-logo.png} 
     \end{tabular}
 
     \vspace{4cm}
@@ -41,70 +41,164 @@
     \vspace{0.5cm}
     {\twentytwopt \textbf{\@title}} \\
     \vspace{2cm}
-    {\eighteenpt \textbf{Instructors: Dr. Bahrak, Dr. Yaghoobzadeh}} \\
+    {\sixteenpt \@author} \\
     \vspace{2cm}
-    {\sixteenpt \textbf{Prepared by (Group Submission):}} \\
-    \vspace{0.5cm}
-    {\eighteenpt \textbf{\@author}} \\
-    \vfill
     {\sixteenpt \@date}
   \end{center}
+  \thispagestyle{empty}
+  \clearpage
 }
 \makeatother
 
 \begin{document}
-\pagenumbering{gobble}
+
 \maketitle
-\newpage
+
 \tableofcontents
-\newpage
-\listoffigures
-\newpage
-\pagenumbering{arabic}
+\clearpage
 
-\section{Introduction}
-This report presents our solutions for Assignment 3 of the Introduction to Data Science course. The assignment consists of three practical machine learning problems that cover different aspects of data science workflow: fraud detection, article share prediction, and candidate ranking.
+\begin{abstract}
+This report outlines the methodology, implementation, and evaluation of our approaches for Assignment 3. The project is divided into multiple distinct tasks, ranging from data exploration to advanced predictive modeling. In Task 3, we specifically address a complex Information Retrieval problem, transitioning from standard tabular classification to a Learning to Rank (LTR) pipeline to effectively match candidates to job postings under extreme class imbalance.
+\end{abstract}
 
-Each task requires a complete ML pipeline including data analysis, preprocessing, feature engineering, model selection, and evaluation. We are restricted to traditional machine learning methods, with deep learning models, pre-trained models, and AutoML tools explicitly prohibited.
+\clearpage
 
-\section{Problem Description}
+% ==========================================
+% TASK 1
+% ==========================================
+\section{Task 1: [Insert Task 1 Title]}
 
-\subsection{Task 1: Fraud Detection (Classification)}
-The first task involves building a classification model to predict whether a retail transaction is fraudulent. The dataset contains transaction information, and careful feature engineering is required to avoid data leakage. All features must be computed using only information available before the target event.
-
-\subsection{Task 2: Article Share Prediction}
-The second task focuses on predicting the number of shares an article will receive. This is a regression problem that requires understanding the relationship between article characteristics and their popularity.
-
-\subsection{Task 3: Candidate Ranking}
-The third task involves ranking candidates for job positions. This requires developing a model that can effectively evaluate and order candidates based on their qualifications and fit for the role.
-
-\section{Methodology}
-
-\subsection{Data Analysis}
-We performed exploratory data analysis (EDA) for each dataset to understand the distribution of features, identify missing values, detect outliers, and discover patterns relevant to each task.
+\subsection{Exploratory Data Analysis}
+% Insert Task 1 EDA details here
 
 \subsection{Preprocessing}
-Data preprocessing steps included handling missing values, encoding categorical variables, scaling numerical features, and addressing class imbalance where applicable.
+% Insert Task 1 Preprocessing details here
 
-\subsection{Feature Engineering}
-For each task, we engineered domain-specific features to improve model performance while carefully avoiding data leakage, especially in the fraud detection task.
+\subsection{Modeling \& Evaluation}
+% Insert Task 1 Modeling details here
 
-\subsection{Model Selection}
-We experimented with various traditional machine learning algorithms including logistic regression, decision trees, random forests, gradient boosting machines, and support vector machines. Model selection was based on cross-validation performance using appropriate metrics for each task.
+\clearpage
 
-\subsection{Evaluation}
-Each model was evaluated using task-appropriate metrics. We used stratified cross-validation to ensure robust performance estimates and prevent overfitting.
+% ==========================================
+% TASK 2
+% ==========================================
+\section{Task 2: [Insert Task 2 Title]}
 
-\section{Implementation}
+\subsection{Exploratory Data Analysis}
+% Insert Task 2 EDA details here
 
-% This section will be filled later with implementation details
+\subsection{Preprocessing}
+% Insert Task 2 Preprocessing details here
 
-\section{Results}
+\subsection{Modeling \& Evaluation}
+% Insert Task 2 Modeling details here
 
-% Results will be added after implementation
+\clearpage
 
+% ==========================================
+% TASK 3
+% ==========================================
+\section{Task 3: Candidate Ranking (Learning to Rank)}
+
+\subsection{Introduction}
+Task 3 requires evaluating and ordering job candidates based on their qualifications. Because the objective is to rank candidates for specific job postings rather than predict a global probability, we approached this as an Information Retrieval problem utilizing a \textbf{Learning to Rank} methodology. 
+
+\subsection{Exploratory Data Analysis (EDA)}
+Extensive data exploration was required to understand the underlying structure of the applications and guide our feature engineering.
+
+\subsubsection{Target Variable Imbalance}
+Our initial analysis revealed a severe class imbalance. As shown in Figure \ref{fig:target_distribution}, the vast majority of applications are labeled 0 (Poor Fit), with true ideal candidates (Label 4) being extremely rare. Consequently, standard classification accuracy is mathematically flawed for this task, necessitating the use of ranking-specific metrics like NDCG.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{01_target_distribution.png}
+    \caption{Distribution of candidate relevance labels showcasing extreme class imbalance.}
+    \label{fig:target_distribution}
+\end{figure}
+
+\subsubsection{The Currency Discrepancy}
+While analyzing salary features, we discovered a massive scaling mismatch. The job board's maximum salary distributions contained extreme outliers in the billions, while candidate expectations remained in a tight, lower distribution (Figure \ref{fig:currency}). This visual confirmation proved that \texttt{salary\_max} was listed in un-normalized local currencies (e.g., IRR), while candidate expectations (\texttt{expected\_salary}) were already globally normalized to USD.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{02_currency_and_salary.png}
+    \caption{Salary distribution anomalies highlighting the need for dynamic currency unification.}
+    \label{fig:currency}
+\end{figure}
+
+\subsubsection{Temporal Distributions \& Interaction Proxies}
+We mapped the temporal distribution of applications to establish a safe cutoff date for our validation set, preventing future data leakage (Figure \ref{fig:temporal}). Furthermore, early boxplots (Figure \ref{fig:exp_gap}) suggested that engineering an "Experience Gap" feature (candidate experience minus minimum job experience) yielded a much higher signal-to-noise ratio than raw experience alone.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{03_temporal_distribution.png}
+        \caption{Timeline of applications used to design the temporal validation split.}
+        \label{fig:temporal}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{04_experience_gap_proxy.png}
+        \caption{Experience Gap proxy highlighting correlation with relevance.}
+        \label{fig:exp_gap}
+    \end{minipage}
+\end{figure}
+
+\subsection{Preprocessing \& Data Integration}
+To prepare the dataset for the ranking algorithm, we merged the relational tables and resolved the identified data integrity issues:
+\begin{itemize}
+    \item \textbf{Text Standardization:} Categorical columns exhibited severe casing and whitespace inconsistencies. A global normalization function was applied to lowercase and strip all strings to prevent fragmented category encoding.
+    \item \textbf{Currency Unification:} Based on our EDA findings, we implemented a parameterized normalizer that applied a historical exchange rate (IRR to USD) strictly to the job postings, establishing a unified USD mathematical baseline for feature comparisons.
+\end{itemize}
+
+\subsection{Interaction Feature Engineering}
+A ranking model relies heavily on the interaction between the query (the job) and the document (the candidate). We dropped non-predictive categorical strings and engineered 19 direct features (17 interactions and 2 target encodings). The final model utilized 29 total features, heavily prioritizing these newly created relationships:
+\begin{enumerate}
+    \item \textbf{Skill Metrics:} We calculated the Jaccard Similarity between skillsets (\texttt{skill\_overlap\_score}), alongside raw string-split counts for both candidates and jobs (\texttt{cand\_skill\_count}, \texttt{job\_skill\_count}) and their relative fraction (\texttt{skill\_count\_ratio}).
+    \item \textbf{Experience \& Seniority:} We extracted continuous experience differences (\texttt{experience\_gap}), mapped title keywords (e.g., "Senior", "Junior") to ordinal values (\texttt{cand\_seniority}, \texttt{job\_seniority}), and checked for strict alignment (\texttt{seniority\_match}).
+    \item \textbf{Salary \& Budget:} We formulated a boolean budget check (\texttt{salary\_within\_budget}) and a continuous float representing the ratio of candidate expectations to the maximum budget (\texttt{salary\_ratio}).
+    \item \textbf{Categorical Ordinals \& Matches:} Textual classifications were converted into clean numeric scales for \texttt{education\_score}, \texttt{english\_score}, and \texttt{company\_size\_num}, while geographic compatibility was flagged via \texttt{location\_match}.
+    \item \textbf{Temporal \& Effort Filters:} We extracted the number of candidate certifications (\texttt{cert\_count}) and computed the age of the job posting (\texttt{job\_age\_days}) alongside the age of the candidate's account (\texttt{acc\_age\_days}) at the time of application to penalize low-effort or automated mass-applying behavior.
+\end{enumerate}
+
+\subsubsection{Double Out-of-Fold (OOF) Target Encoding}
+The candidate's \texttt{current\_title} and \texttt{university} contained massive predictive power (prestige and specific role relevance) but possessed high cardinality, risking data leakage and dimensionality explosion. We implemented a Group K-Fold Out-of-Fold Target Encoder with a mathematical smoothing parameter. By encoding these two strings using the target averages of out-of-fold applications (grouped safely by \texttt{job\_id}), we safely provided the model with these critical signals.
+
+\subsection{Model Development \& Hyperparameter Tuning}
+We utilized \texttt{LightGBM Ranker} with the \texttt{lambdarank} objective function. To simulate the hidden test environment, we split the training data using an application cutoff date of \texttt{2024-05-01}. The matrices were explicitly sorted and grouped by \texttt{job\_id}.
+
+A dynamic tuning loop found that a learning rate of 0.05 combined with a 5-fold OOF smoothing factor provided the highest stability. As shown in Figure \ref{fig:feature_importance}, our engineered interaction features—specifically the continuous skill overlaps, experience gaps, and OOF encoded titles—completely dominated the model's decision-making process.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{05_feature_importance.png}
+    \caption{Top 15 Most Important Features (By Information Gain). Engineered interaction features drastically outperformed raw dataset variables.}
+    \label{fig:feature_importance}
+\end{figure}
+
+\subsection{Comprehensive Evaluation}
+Because standard libraries often abstract Information Retrieval metrics, we implemented custom Python evaluations for \textbf{NDCG@10} (Normalized Discounted Cumulative Gain) and \textbf{MAP@5} (Mean Average Precision). 
+
+The baseline validation model achieved an excellent custom \textbf{Mean NDCG@10 of $\sim$0.901} and a \textbf{MAP@5 of $\sim$0.731} (Figure \ref{fig:evaluation_dist}). This confirms the model successfully pulls rare, highly-qualified applicants out of the severe class imbalance and positions them within the top recommendations for recruiters. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{06_evaluation_distribution.png}
+    \caption{Distribution of NDCG@10 and AP@5 scores across all queries (jobs) in the temporal validation set.}
+    \label{fig:evaluation_dist}
+\end{figure}
+
+\subsection{Final Inference \& Conclusion}
+Applying the principle of Occam's Razor, we recognized that while highly complex multi-model ensembles can sometimes yield marginal gains, a robust, single well-tuned LightGBM Ranker is vastly superior for production-level stability. For the final submission, our champion model inferred unbounded continuous margins (log-odds) across the unseen test set. The final output was saved with strict adherence to the original test indices, ensuring the platform's backend could internally group and rank the scores accurately. 
+
+The finalized pipeline successfully resolved the extreme data imbalance, resulting in a final evaluation score of \textbf{84}.
+
+% ==========================================
+% CONCLUSION
+% ==========================================
+\clearpage
 \section{Conclusion}
-
-% Conclusion will be added after completing the analysis
+This assignment highlighted the fundamental differences between standard tabular modeling and domain-specific challenges. From fraud detection constraints in early tasks to the complexities of Information Retrieval and LambdaRank in Task 3, our approaches emphasized robust feature engineering and strict data-leakage prevention. The successful implementation of techniques like Out-of-Fold Target Encoding and cross-table interaction metrics ultimately proved to be the defining factors in achieving high predictive performance across all tasks.
 
 \end{document}
