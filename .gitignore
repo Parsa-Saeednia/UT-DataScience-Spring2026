@@ -38,6 +38,7 @@ __pycache__/
 
 # Virtual environments 
 venv/
+.venv
 env/
 .env
 
@@ -56,6 +57,7 @@ Thumbs.db
 .DS_Store
 
 # VS Code 
+.vscode
 .vscode/*
 !.vscode/settings.json
 
