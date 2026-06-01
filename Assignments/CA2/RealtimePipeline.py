@@ -10,11 +10,14 @@ from plotly.subplots import make_subplots
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, LongType, BooleanType, ArrayType
-from pyspark.sql.functions import explode, col, sum, count, window, approx_count_distinct, struct, collect_set, from_json, avg, round, to_timestamp, to_json
+from pyspark.sql.functions import explode, col, sum, count, window, approx_count_distinct, collect_set, from_json, avg, round, to_timestamp, struct, to_json
 
 shutil.rmtree('checkpoints', ignore_errors=True)
-if os.path.exists('revenue.csv'): os.remove('revenue.csv')
-if os.path.exists('fraud.csv'): os.remove('fraud.csv')
+
+global_state = {
+    "fraud": pd.DataFrame(columns=['fraud_type', 'count']),
+    "revenue": pd.DataFrame(columns=['cuisine', 'total_revenue', 'avg_order_value'])
+}
 
 spark_version = pyspark.__version__
 scala_ver = "2.13" if spark_version.startswith("4") else "2.12"
@@ -80,13 +83,13 @@ def process_fraud_batch(df, epoch_id):
     df.show(truncate=False)
     pdf = df.groupBy("fraud_type").count().toPandas()
     if not pdf.empty:
-        pdf.to_csv("fraud.csv", index=False)
+        global_state["fraud"] = pdf
 
 def process_revenue_batch(df, epoch_id):
     df.show()
     pdf = df.orderBy(col("total_revenue").desc()).limit(10).toPandas()
     if not pdf.empty:
-        pdf.to_csv("revenue.csv", index=False)
+        global_state["revenue"] = pdf
 
 all_alerts_df.selectExpr("user_id AS key", "to_json(struct(user_id, window_start, window_end, fraud_type, details)) AS value") \
     .writeStream \
@@ -127,7 +130,7 @@ app.layout = html.Div(style={'backgroundColor': '#f4f6f9', 'minHeight': '100vh',
             dcc.Graph(id='revenue-graph', config={'displayModeBar': False})
         ])
     ]),
-    dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
+    dcc.Interval(id='interval-component', interval=500, n_intervals=0)
 ])
 
 @app.callback(
@@ -135,36 +138,31 @@ app.layout = html.Div(style={'backgroundColor': '#f4f6f9', 'minHeight': '100vh',
     [Input('interval-component', 'n_intervals')]
 )
 def update_graphs(n):
-    if os.path.exists("fraud.csv") and os.path.getsize("fraud.csv") > 0:
-        try:
-            fraud_pdf = pd.read_csv("fraud.csv")
-            fig_fraud = px.bar(fraud_pdf, x='fraud_type', y='count', color='fraud_type',
-                               labels={'fraud_type': 'Alert Type', 'count': 'Total Flags'},
-                               color_discrete_map={'Geographical_Impossibility': '#e53e3e', 'Velocity_Spam': '#dd6b20'},
-                               template='plotly_white')
-            fig_fraud.update_layout(margin=dict(l=20, r=20, t=30, b=20), showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-            fig_fraud.update_traces(marker_line_width=0)
-        except Exception:
-            fig_fraud = px.bar(title="Reading fraud data...", template='plotly_white')
+    fraud_pdf = global_state["fraud"]
+    revenue_pdf = global_state["revenue"]
+
+    if not fraud_pdf.empty:
+        fig_fraud = px.bar(fraud_pdf, x='fraud_type', y='count', color='fraud_type',
+                           labels={'fraud_type': 'Alert Type', 'count': 'Total Flags'},
+                           color_discrete_map={'Geographical_Impossibility': '#e53e3e', 'Velocity_Spam': '#dd6b20'},
+                           template='plotly_white')
+        fig_fraud.update_layout(margin=dict(l=20, r=20, t=30, b=20), showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig_fraud.update_traces(marker_line_width=0)
     else:
         fig_fraud = px.bar(title="Monitoring... No fraud detected yet.", template='plotly_white')
         fig_fraud.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 
-    if os.path.exists("revenue.csv") and os.path.getsize("revenue.csv") > 0:
-        try:
-            revenue_pdf = pd.read_csv("revenue.csv")
-            fig_rev = make_subplots(specs=[[{"secondary_y": True}]])
-            fig_rev.add_bar(x=revenue_pdf['cuisine'], y=revenue_pdf['total_revenue'], name="Total Revenue", marker_color='#3182ce')
-            fig_rev.add_trace(px.line(revenue_pdf, x='cuisine', y='avg_order_value', markers=True).data[0], secondary_y=True)
-            fig_rev.data[1].line.color = '#38a169'
-            fig_rev.data[1].line.width = 3
-            fig_rev.data[1].name = "Avg Order Value"
-            fig_rev.update_layout(template='plotly_white', margin=dict(l=20, r=20, t=30, b=20), showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-            fig_rev.update_yaxes(title_text="Total Revenue ($)", secondary_y=False, gridcolor='#edf2f7')
-            fig_rev.update_yaxes(title_text="Avg Order Value ($)", secondary_y=True, showgrid=False)
-            fig_rev.update_traces(marker_line_width=0, selector=dict(type="bar"))
-        except Exception:
-            fig_rev = px.bar(title="Reading revenue data...", template='plotly_white')
+    if not revenue_pdf.empty:
+        fig_rev = make_subplots(specs=[[{"secondary_y": True}]])
+        fig_rev.add_bar(x=revenue_pdf['cuisine'], y=revenue_pdf['total_revenue'], name="Total Revenue", marker_color='#3182ce')
+        fig_rev.add_trace(px.line(revenue_pdf, x='cuisine', y='avg_order_value', markers=True).data[0], secondary_y=True)
+        fig_rev.data[1].line.color = '#38a169'
+        fig_rev.data[1].line.width = 3
+        fig_rev.data[1].name = "Avg Order Value"
+        fig_rev.update_layout(template='plotly_white', margin=dict(l=20, r=20, t=30, b=20), showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig_rev.update_yaxes(title_text="Total Revenue ($)", secondary_y=False, gridcolor='#edf2f7')
+        fig_rev.update_yaxes(title_text="Avg Order Value ($)", secondary_y=True, showgrid=False)
+        fig_rev.update_traces(marker_line_width=0, selector=dict(type="bar"))
     else:
         fig_rev = px.bar(title="Monitoring... Waiting for revenue data.", template='plotly_white')
         fig_rev.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
@@ -178,4 +176,5 @@ dash_thread = threading.Thread(target=run_dash)
 dash_thread.daemon = True
 dash_thread.start()
 
+print("\n✅ DASHBOARD IS LIVE! Open Chrome and go to: http://127.0.0.1:8050")
 spark.streams.awaitAnyTermination()
