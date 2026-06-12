@@ -77,34 +77,142 @@ The third section (\textbf{Task 3}) implements sequential modeling to solve a \t
 \section{Task 1: MLP}
 
 \subsection{Dataset Loading}
-% Insert Dataset Loading details here
+The project utilizes the California Housing dataset, consisting of 20,640 records and 8 numerical features representing demographic and geographic attributes. The target variable is \texttt{MedHouseVal} (median house value). To ensure computational stability and prevent the propagation of \texttt{NaN} values during gradient calculations in the neural network, an initial data integrity check was performed. Missing values were systematically handled using \texttt{SimpleImputer} with a mean strategy, ensuring no valuable records were discarded prematurely.
 
 \subsection{Exploratory Data Analysis (EDA)}
-% Insert EDA details here
+A comprehensive Exploratory Data Analysis (EDA) was conducted to understand the underlying data distributions. As a foundational step, the descriptive statistics (including mean, standard deviation, min/max bounds, and quartiles) were extracted to evaluate the central tendency and dispersion of the raw features.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{P10.png}
+    \caption{Descriptive statistical summary of the raw dataset prior to feature engineering, detailing the overall spread and identifying initial scale differences among variables.}
+    \label{fig:raw_stats}
+\end{figure}
+
+Visual inspections via histograms confirmed that variables such as \texttt{Population} and \texttt{MedInc} exhibited significant right-skewness (long-tailed distributions). 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{P1.png}
+    \caption{Distribution of raw features before preprocessing, highlighting the skewness in Population and Income.}
+    \label{fig:raw_dist}
+\end{figure}
+
+To identify multicollinearity and evaluate the predictive power of each feature, a correlation matrix was generated.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{P2.png}
+    \caption{Correlation matrix of the raw features and the target variable.}
+    \label{fig:corr_matrix}
+\end{figure}
+
+Furthermore, an inspection of maximum values uncovered extreme physical anomalies. Box plots highlighted severe outliers, most notably in the \texttt{AveOccup} feature, where certain block groups incorrectly reported over 1,200 individuals per household.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{P3.png}
+    \caption{Box plots identifying extreme outliers in the raw dataset, specifically in average occupancy and rooms.}
+    \label{fig:boxplots}
+\end{figure}
 
 \subsection{Data Preparation}
-% Insert Data Preparation details here
+To guarantee experimental reproducibility, the dataset was split into Training (70\%), Validation (15\%), and Testing (15\%) sets with a fixed \texttt{random\_state=42}. Recognizing the presence of extreme outliers identified during EDA, \texttt{RobustScaler} was selected over \texttt{StandardScaler}. By leveraging the Interquartile Range (IQR), \texttt{RobustScaler} effectively standardized the feature scales without being skewed by the anomalous values. Finally, the processed arrays were converted into PyTorch Tensors and wrapped in \texttt{DataLoader} modules to facilitate efficient mini-batch gradient descent.
 
 \subsection{Baseline MLP Model}
-% Insert Baseline MLP details here
+A fundamental Multi-Layer Perceptron (MLP) was constructed to serve as the baseline, strictly following the principle of Occam's Razor. The architecture was designed to map the 8 raw input features through three hidden layers (128, 64, and 32 neurons, respectively) to a single continuous output. Rectified Linear Unit (ReLU) activations were employed to capture non-linear relationships, alongside a light \texttt{Dropout(0.3)} to provide basic regularization.
 
 \subsection{Model Training}
-% Insert Model Training details here
+The training pipeline was optimized using the \texttt{Adam} optimizer and Mean Squared Error (\texttt{MSELoss}) as the objective function. To mitigate the risk of overfitting, an \texttt{EarlyStopping} mechanism was implemented with a patience of 15 epochs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{P4.png}
+    \caption{Training and Validation Loss curves for the Baseline MLP model.}
+    \label{fig:baseline_loss}
+\end{figure}
 
 \subsection{Feature Engineering}
-% Insert Feature Engineering details here
+To explicitly inject domain knowledge into the model and simplify its optimization landscape, a rigorous feature engineering pipeline was executed based on the physical and economic properties of the housing market:
+\begin{enumerate}
+    \item \textbf{Outlier Pruning:} A multi-conditional mask was deployed to discard illogical bounds, specifically restricting the data to \texttt{AveRooms} $\le 10$, \texttt{AveOccup} $\le 6$, \texttt{AveBedrms} $\le 4$, and \texttt{Population} $\le 6800$. This targeted filtering successfully removed 465 garbage rows, yielding a highly dependable cleaned dataset of 20,175 records.
+    \item \textbf{Geospatial Distance Translation:} Abstract geographical coordinates (\texttt{Latitude} and \texttt{Longitude}) were transformed into functional economic metrics. This was achieved by calculating the precise Euclidean distance from each block group to the centers of California's two primary economic and technology hubs: San Francisco (SF) located at ($37.77^\circ N, -122.41^\circ W$) and Los Angeles (LA) located at ($34.05^\circ N, -118.24^\circ W$). The mathematical formulation for calculating these spatial features (\texttt{Dist\_to\_SF} and \texttt{Dist\_to\_LA}) is expressed as:
+    \begin{equation}
+        \text{Dist\_to\_SF} = \sqrt{(\text{Latitude} - 37.77)^2 + (\text{Longitude} - (-122.41))^2}
+    \end{equation}
+    \begin{equation}
+        \text{Dist\_to\_LA} = \sqrt{(\text{Latitude} - 34.05)^2 + (\text{Longitude} - (-118.24))^2}
+    \end{equation}
+    \item \textbf{Density Ratios:} Contextual features measuring structural and demographic density per household were synthesized to help the network capture residential properties and crowd density. These metrics are heavily correlated with property valuation. A small epsilon ($\epsilon = 10^{-6}$) was added to the denominators to preserve absolute numerical stability and prevent zero-division errors during batch propagation:
+    \begin{equation}
+        \text{RoomsPerHousehold} = \frac{\text{AveRooms}}{\text{AveOccup} + 10^{-6}}
+    \end{equation}
+    \begin{equation}
+        \text{BedroomsPerRoom} = \frac{\text{AveBedrms}}{\text{AveRooms} + 10^{-6}}
+    \end{equation}
+    \begin{equation}
+        \text{PopPerHouse} = \frac{\text{Population}}{\text{AveOccup} + 10^{-6}}
+    \end{equation}
+    \item \textbf{Non-Linear Spatial Decay (Logarithmic Distance):} In real estate economics, the price-influence of a major city center decays non-linearly. To capture this log-linear relationship, a \texttt{log1p} transformation was applied directly to the spatial features, generating:
+    \begin{equation}
+        \text{Dist\_to\_SF\_log} = \ln(1 + \text{Dist\_to\_SF})
+    \end{equation}
+    \begin{equation}
+        \text{Dist\_to\_LA\_log} = \ln(1 + \text{Dist\_to\_LA})
+    \end{equation}
+    \item \textbf{Multicollinearity \& Noise Reduction:} The raw \texttt{Population} column was dropped from the final feature set (\texttt{X\_final}) to prevent redundancy and high multicollinearity, as its variance was already successfully captured within the newly engineered \texttt{PopPerHouse} ratio.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{P5.png}
+    \caption{Feature distributions after applying logarithmic transformations, outlier pruning, and feature engineering.}
+    \label{fig:engineered_dist}
+\end{figure}
+
+To validate the effectiveness of these transformations, a secondary correlation analysis was performed on the enriched feature set.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{P9.png}
+    \caption{Sorted correlation of the engineered features with the target variable, clearly highlighting the strong predictive power of \texttt{LogMedInc} and \texttt{RoomsPerHousehold}.}
+    \label{fig:engineered_corr}
+\end{figure}
 
 \subsection{Enhanced MLP Model}
-% Insert Enhanced MLP Model details here
+To process the enriched feature space, the Enhanced MLP was expanded. To prevent the "Curse of Dimensionality", \texttt{BatchNorm1d} layers were introduced after every linear transformation to combat internal covariate shift. Additionally, the \texttt{Dropout} rate was increased to 0.3. This aggressive regularization forced the network to rely on dominant economic signals rather than memorizing the newly engineered dimensions.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{P6.png}
+    \caption{Training and Validation Loss curves for the Enhanced MLP model, showing improved stability.}
+    \label{fig:enhanced_loss}
+\end{figure}
 
 \subsection{Model Evaluation and Comparison}
-% Insert Evaluation details here
+Both models were evaluated on the unseen test set using Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and the $R^2$ Score. To maximize inference speed, \texttt{torch.no\_grad()} was utilized. The Baseline model achieved an $R^2$ Score of 0.8122, an MAE of 0.3472, and an RMSE of 0.4983. Upon refining the geospatial distance metrics and pruning low-correlation variables, the \textbf{Enhanced Model successfully achieved a superior $R^2$ Score of 0.8358}, alongside a reduced MAE of 0.3340 and an RMSE of 0.4798. This indicates that the refined model successfully explains roughly 83.58\% of the variance in the California housing market.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{P7.png}
+    \caption{Actual vs. Predicted median house values for the Enhanced MLP model. The strong alignment along the diagonal indicates high predictive accuracy.}
+    \label{fig:actual_vs_predicted}
+\end{figure}
 
 \subsection{Error Analysis}
-% Insert Error Analysis details here
+An in-depth analysis of the prediction residuals ($y_{true} - y_{pred}$) demonstrated a roughly normal distribution centered around zero, implying that the model is unbiased.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{P8.png}
+    \caption{Error distribution (residuals) of the Enhanced model. The bell-shaped curve centered at zero confirms the absence of systematic bias.}
+    \label{fig:error_distribution}
+\end{figure}
+
+However, heteroscedasticity was observed at the higher end of the price spectrum. Specifically, the highest absolute errors occurred where actual house prices hit the \$500,000 artificial cap present in the dataset. Since the target variable is hard-capped, the continuous regression nature of the MLP naturally struggles to predict a strict horizontal cutoff.
 
 \subsection{Conclusion and Future Work}
-% Insert Task 1 Conclusion here
+Task 1 conclusively demonstrated that while Multi-Layer Perceptrons are highly capable, their performance on tabular data is intrinsically tied to data quality and feature representation. The transition from a baseline $R^2$ of 0.8122 to an enhanced $R^2$ of 0.8358 proved that transforming abstract geospatial coordinates into functional distances, coupled with strict noise pruning, yields superior predictive power and a noticeable reduction in both MAE and RMSE. Future iterations of this project could explore replacing the Adam optimizer with SGD paired with a Learning Rate Scheduler (\texttt{StepLR}) to achieve a smoother convergence.
 
 \clearpage
 
@@ -151,7 +259,7 @@ The third section (\textbf{Task 3}) implements sequential modeling to solve a \t
 % Insert Preprocessing details here
 
 \subsection{Exploratory Data Analysis (EDA)}
-% Insert EDA details here
+% Insert Exploratory Data Analysis details here
 
 \subsection{Model Architecture}
 % Insert Model Architecture details here
@@ -162,7 +270,7 @@ The third section (\textbf{Task 3}) implements sequential modeling to solve a \t
 \subsection{Evaluation and Visualization}
 % Insert Evaluation details here
 
-\subsection{Implementing an LSTM-Based Model}
+\subsection{Implementing an LSTMBased Model}
 % Insert LSTM implementation details here
 
 \clearpage
