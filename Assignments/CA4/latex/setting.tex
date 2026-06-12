@@ -1,0 +1,86 @@
+% !TEX TS-program = xelatex
+
+% Document class and spacing
+\renewcommand{\baselinestretch}{1.4}
+
+% Packages
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[colorlinks=true, linkcolor=darkblue, urlcolor=darkblue, citecolor=darkblue]{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\usepackage{calc}
+\usepackage{eso-pic}
+\usepackage{fontspec}
+\usepackage{natbib}
+\usepackage{float}
+\usepackage{caption}
+
+\bibliographystyle{plain}
+
+% English Fonts - Times New Roman
+\setmainfont{Times New Roman}
+
+% Colors
+\definecolor{darkblue}{rgb}{.204,.353,.541}
+\definecolor{lightblue}{RGB}{210, 227, 245}
+
+% Section box command
+\newcommand{\sectionbox}[1]{%
+  \begin{tcolorbox}[colback=lightblue, colframe=lightblue, width=\linewidth, sharp corners]
+    \color{darkblue} \eighteenpt \bfseries #1
+  \end{tcolorbox}
+}
+
+% Section and subsection formatting
+\titleformat{\section}
+{\eighteenpt\bfseries}{} {0em} {\sectionbox}
+\titlespacing{\section}{0pt}{12pt}{6pt}
+
+\titleformat{\subsection}
+{\color{darkblue}\sixteenpt\bfseries}
+{\thesubsection}{1em}
+{}
+
+% Font size commands
+\newcommand{\sixteenpt}{\fontsize{16pt}{18pt}\selectfont}
+\newcommand{\eighteenpt}{\fontsize{18pt}{20pt}\selectfont}
+\newcommand{\twentytwopt}{\fontsize{22pt}{24pt}\selectfont}
+\newcommand{\twentyeightpt}{\fontsize{28pt}{30pt}\selectfont}
+
+% Custom title page
+\makeatletter
+\def\maketitle{
+  \begin{center}
+    \begin{tabular}{ p{3cm} p{7cm} p{3.5cm} }
+      \includegraphics[width=3cm]{assets/images/logo.png} &
+      \vspace{-3cm}
+      \begin{center}
+        {\sixteenpt{\textbf{University of Tehran}}\\[0.2cm]
+          \sixteenpt{\textbf{College of Engineering}}\\[0.2cm]
+        \sixteenpt{\textbf{Department of Electrical and Computer Engineering}}}
+      \end{center}
+      &
+      \includegraphics[width=3.5cm]{assets/images/eng-logo.png} 
+    \end{tabular}
+
+    \vspace{4cm}
+    {\twentyeightpt \textbf{\CourseName}} \\
+    \vspace{0.5cm}
+    {\twentytwopt \textbf{\@title}} \\
+    \vspace{2cm}
+    {\eighteenpt \textbf{Instructors: Dr. Bahrak, Dr. Yaghoobzadeh}} \\
+    \vspace{2cm}
+    {\sixteenpt \textbf{Prepared by:}} \\
+    \vspace{0.5cm}
+    {\eighteenpt \textbf{\@author}} \\
+    {\eighteenpt \textbf{Student No: \SNum}} \\
+    \vfill
+    {\sixteenpt \@date}
+  \end{center}
+}
+\makeatother
