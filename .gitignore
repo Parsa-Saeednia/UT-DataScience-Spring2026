@@ -69,3 +69,6 @@ Assignments/CA2/logs.txt
 # *.jpg
 # *.jpeg
 # *.svg
+
+checkpoints/
+logs.txt
