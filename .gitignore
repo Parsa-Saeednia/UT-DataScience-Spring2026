@@ -67,3 +67,6 @@ Thumbs.db
 # *.jpg
 # *.jpeg
 # *.svg
+
+checkpoints/
+logs.txt
