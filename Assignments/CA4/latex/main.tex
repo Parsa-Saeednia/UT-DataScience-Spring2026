@@ -1,0 +1,184 @@
+% !TEX TS-program = xelatex
+
+\documentclass[a4paper,12pt]{extarticle}
+\input{setting.tex}
+
+\geometry{a4paper, margin=1in}
+\graphicspath{{assets/images/}}
+
+% Document Info
+\newcommand{\CourseName}{Data Science}
+\newcommand{\assignNum}{4}
+\title{Assignment \assignNum}
+
+% Group Members Configuration
+\author{
+  \begin{tabular}{c}
+  Parsa Saeednia (810102460) \\
+  Mohammad Hossein Mazaheri (810102585) \\
+  Mohammad Reza Pirhadi (810102423)
+  \end{tabular}
+}
+\date{\today}
+
+\makeatletter
+\def\maketitle{
+  \begin{center}
+    \begin{tabular}{ p{3cm} p{7cm} p{3.5cm} }
+      \includegraphics[width=3cm]{logo.png} &
+      \vspace{-3cm}
+      \begin{center}
+        {\sixteenpt{\textbf{University of Tehran}}\\[0.2cm]
+        \sixteenpt{\textbf{College of Engineering}}\\[0.2cm]
+        \sixteenpt{\textbf{Department of Electrical and Computer Engineering}}}
+      \end{center}
+      &
+      \includegraphics[width=3.5cm]{eng-logo.png} 
+    \end{tabular}
+
+    \vspace{4cm}
+    {\twentyeightpt \textbf{\CourseName}} \\
+    \vspace{0.5cm}
+    {\twentytwopt \textbf{\@title}} \\
+    \vspace{2cm}
+    {\sixteenpt \@author} \\
+    \vspace{2cm}
+    {\sixteenpt \@date}
+  \end{center}
+  \thispagestyle{empty}
+  \clearpage
+}
+\makeatother
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\clearpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+This report presents the implementation and analysis of our deep learning models developed as part of Assignment 4 for the Data Science course. The project is structured around three distinct tasks, each focusing on a unique data domain and neural network architecture, collectively equipping us with a comprehensive deep learning workflow.
+
+The first section (\textbf{Task 1}) focuses on feature engineering and tabular data regression. Using the California Housing dataset, we train a \textbf{Multi-Layer Perceptron (MLP)} to predict median house prices. This task involves a complete end-to-end pipeline, including exploratory data analysis, data scaling, baseline modeling, and the manual creation of domain-specific features to evaluate their impact on the model's generalization and prediction accuracy.
+
+The second section (\textbf{Task 2}) introduces computer vision by building a \textbf{Convolutional Neural Network (CNN)} for image classification on the Fruits and Vegetables dataset. Beyond achieving high classification accuracy, this section emphasizes the mathematical foundations of convolutional layers and rigorous preprocessing to prevent data leakage. We conduct a deep robustness analysis to determine whether the model learns actual morphological shapes or merely memorizes colors, and we utilize \textbf{Grad-CAM} to visually explain the model's spatial attention and decision-making process.
+
+The third section (\textbf{Task 3}) implements sequential modeling to solve a \textbf{Knowledge Tracing} problem within educational data mining. Using the ASSISTments2017 dataset, we develop a \textbf{Recurrent Neural Network (RNN)} to analyze chronological student interactions and predict future correctness. This layer explores sequence windowing, temporal feature engineering, and the critical handling of varying sequence lengths, culminating in an advanced \textbf{LSTM-based} implementation to better capture long-term learning dependencies.
+
+\clearpage
+
+% ==========================================
+% TASK 1: MLP
+% ==========================================
+\section{Task 1: MLP}
+
+\subsection{Dataset Loading}
+% Insert Dataset Loading details here
+
+\subsection{Exploratory Data Analysis (EDA)}
+% Insert EDA details here
+
+\subsection{Data Preparation}
+% Insert Data Preparation details here
+
+\subsection{Baseline MLP Model}
+% Insert Baseline MLP details here
+
+\subsection{Model Training}
+% Insert Model Training details here
+
+\subsection{Feature Engineering}
+% Insert Feature Engineering details here
+
+\subsection{Enhanced MLP Model}
+% Insert Enhanced MLP Model details here
+
+\subsection{Model Evaluation and Comparison}
+% Insert Evaluation details here
+
+\subsection{Error Analysis}
+% Insert Error Analysis details here
+
+\subsection{Conclusion and Future Work}
+% Insert Task 1 Conclusion here
+
+\clearpage
+
+% ==========================================
+% TASK 2: CNN
+% ==========================================
+\section{Task 2: CNN}
+
+\subsection{Introduction}
+% Insert Introduction details here
+
+\subsection{Dataset Description \& Configuration}
+% Insert Dataset Description details here
+
+\subsection{Statistical EDA and Preprocessing}
+% Insert Statistical EDA details here
+
+\subsection{Mathematical Foundations}
+% Insert Mathematical Foundations calculations here
+
+\subsection{Model Architecture and Training}
+% Insert Model Architecture details here
+
+\subsection{Robustness Analysis: Color vs. Shape}
+% Insert Robustness Analysis details here
+
+\subsection{Explainability with Grad-CAM}
+% Insert Grad-CAM details here
+
+\clearpage
+
+% ==========================================
+% TASK 3: RNN
+% ==========================================
+\section{Task 3: RNN}
+
+\subsection{Introduction}
+% Insert Introduction details here
+
+\subsection{Dataset Description}
+% Insert Dataset Description details here
+
+\subsection{Preprocessing and Feature Engineering}
+% Insert Preprocessing details here
+
+\subsection{Exploratory Data Analysis (EDA)}
+% Insert EDA details here
+
+\subsection{Model Architecture}
+% Insert Model Architecture details here
+
+\subsection{Model Training}
+% Insert Model Training details here
+
+\subsection{Evaluation and Visualization}
+% Insert Evaluation details here
+
+\subsection{Implementing an LSTM-Based Model}
+% Insert LSTM implementation details here
+
+\clearpage
+
+% ==========================================
+% QUESTIONS (10% Bonus)
+% ==========================================
+\section{Questions}
+% Insert answers to the bonus questions here
+
+\clearpage
+
+% ==========================================
+% CONCLUSION
+% ==========================================
+\section{Conclusion}
+% Insert final overall conclusion here
+
+\end{document}
