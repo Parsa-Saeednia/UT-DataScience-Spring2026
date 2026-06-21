@@ -39,8 +39,6 @@ __pycache__/
 # Virtual environments 
 venv/
 .venv
-env/
-.env
 
 # ==========================================
 # 3. Data Science Datasets (Optional but Recommended)
@@ -76,3 +74,5 @@ logs.txt
 
 Assignments/CA4/data/CA4_DB
 Assignments/Final_Project/data
+env/
+.env
