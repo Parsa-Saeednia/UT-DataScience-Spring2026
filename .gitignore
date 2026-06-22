@@ -46,6 +46,7 @@ venv/
 *.dat
 *.sqlite
 *.db
+*.pkl
 
 # ==========================================
 # 4. OS & Editor Clutter
