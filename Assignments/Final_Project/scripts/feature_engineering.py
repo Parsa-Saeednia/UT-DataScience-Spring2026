@@ -1,26 +1,122 @@
+import os
+import numpy as np
 import pandas as pd
+import pretty_midi
 
-def filter_noise(df: pd.DataFrame) -> pd.DataFrame:
-    df = df[df['duration'] >= 60.0]
+def filter_outliers(df: pd.DataFrame) -> pd.DataFrame:
+    df = df[(df['duration'] >= 60.0) & (df['duration'] <= 1000.0)]
     if 'canonical_composer' in df.columns:
-        composer_counts = df['canonical_composer'].value_counts()
-        viable = composer_counts[composer_counts >= 10].index
+        counts = df['canonical_composer'].value_counts()
+        viable = counts[counts >= 10].index
         df = df[df['canonical_composer'].isin(viable)]
     return df
 
-def scale_features(df: pd.DataFrame) -> pd.DataFrame:
+def scale_duration(df: pd.DataFrame) -> pd.DataFrame:
     if 'duration' in df.columns and not df.empty:
-        train_slice = df[df['split'] == 'train'] if 'split' in df.columns else df
-        if train_slice.empty:
-            train_slice = df
-            
-        mean_duration = train_slice['duration'].mean()
-        std_duration = train_slice['duration'].std()
-        
-        df['duration_scaled'] = (df['duration'] - mean_duration) / std_duration if std_duration > 0 else 0.0
+        train_df = df[df['split'] == 'train'] if 'split' in df.columns else df
+        train_df = train_df if not train_df.empty else df
+        mean_dur = train_df['duration'].mean()
+        std_dur = train_df['duration'].std()
+        df['duration_scaled'] = (df['duration'] - mean_dur) / std_dur if std_dur > 0 else 0.0
     return df
 
-def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
-    df = filter_noise(df)
-    df = scale_features(df)
-    return df
+def _extract_notes(pm: pretty_midi.PrettyMIDI) -> list:
+    return sorted([n for inst in pm.instruments for n in inst.notes], key=lambda x: x.start)
+
+def _build_transition_matrix(pitch_classes: np.ndarray) -> np.ndarray:
+    matrix = np.zeros((12, 12))
+    for i in range(len(pitch_classes) - 1):
+        matrix[pitch_classes[i], pitch_classes[i+1]] += 1
+    return matrix
+
+def _build_sequence_tokens(notes: list) -> list:
+    tokens = []
+    window_vel = []
+    
+    for i, n in enumerate(notes):
+        step = n.start - notes[i-1].start if i > 0 else 0.0
+        dur = n.end - n.start
+        
+        window_vel.append(n.velocity)
+        if len(window_vel) > 10:
+            window_vel.pop(0)
+            
+        energy = int(np.clip((sum(window_vel) / len(window_vel)) / 12.7, 1, 10))
+        tokens.append([int(n.pitch), float(dur), float(step), int(n.velocity), energy])
+        
+    return tokens
+
+def _compute_midi_stats(notes: list, total_duration: float) -> dict:
+    pitches = np.array([n.pitch for n in notes])
+    velocities = np.array([n.velocity for n in notes])
+    durations = np.array([n.end - n.start for n in notes])
+    intervals = np.abs(np.diff(pitches))
+    
+    pitch_classes = pitches % 12
+    pc_counts = np.bincount(pitch_classes, minlength=12)
+    trans_matrix = _build_transition_matrix(pitch_classes)
+    polyphony = np.sum(durations) / total_duration if total_duration > 0 else 0.0
+    seq_tokens = _build_sequence_tokens(notes)
+
+    return {
+        'notes_per_sec': len(notes) / total_duration if total_duration > 0 else 0.0,
+        'avg_pitch': float(np.mean(pitches)),
+        'pitch_range': int(np.max(pitches) - np.min(pitches)),
+        'avg_velocity': float(np.mean(velocities)),
+        'velocity_var': float(np.std(velocities)),
+        'avg_note_duration': float(np.mean(durations)),
+        'avg_interval': float(np.mean(intervals)),
+        'polyphony_rate': float(polyphony),
+        'pitch_distribution': (pc_counts / len(notes)).tolist(),
+        'transition_matrix': trans_matrix.tolist(),
+        'sequence_tokens': seq_tokens
+    }
+
+def parse_midi_file(midi_path: str) -> dict:
+    try:
+        pm = pretty_midi.PrettyMIDI(midi_path)
+        notes = _extract_notes(pm)
+        if len(notes) < 50:
+            return {}
+        return _compute_midi_stats(notes, pm.get_end_time())
+    except Exception:
+        return {}
+
+def extract_features_batch(df: pd.DataFrame, base_dir: str) -> pd.DataFrame:
+    features_list = []
+    valid_indices = []
+
+    for idx, row in df.iterrows():
+        midi_path = os.path.join(base_dir, row['midi_filename'].replace('/', os.sep))
+        if os.path.exists(midi_path):
+            features = parse_midi_file(midi_path)
+            if features:
+                features_list.append(features)
+                valid_indices.append(idx)
+
+    features_df = pd.DataFrame(features_list, index=valid_indices)
+    return pd.concat([df.loc[valid_indices], features_df], axis=1)
+
+def persist_data(df: pd.DataFrame, pkl_path: str) -> None:
+    os.makedirs(os.path.dirname(pkl_path), exist_ok=True)
+    df.to_pickle(pkl_path)
+    print(f"Feature engineering complete. Saved {len(df)} records to {pkl_path}")
+
+def execute_pipeline() -> None:
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    data_dir = os.path.join(base_dir, 'data', 'maestro-v3.0.0')
+    input_pkl = os.path.join(base_dir, 'data', 'dataframes', 'preprocessed_data.pkl')
+    output_pkl = os.path.join(base_dir, 'data', 'dataframes', 'final_features.pkl')
+
+    if not os.path.exists(input_pkl):
+        raise FileNotFoundError(f"Input file missing: {input_pkl}")
+
+    df = pd.read_pickle(input_pkl)
+    df = filter_outliers(df)
+    df = scale_duration(df)
+    df = extract_features_batch(df, data_dir)
+    
+    persist_data(df, output_pkl)
+
+if __name__ == "__main__":
+    execute_pipeline()

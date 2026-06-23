@@ -17,12 +17,11 @@ def clean_and_encode(df: pd.DataFrame) -> pd.DataFrame:
 def save_data(df: pd.DataFrame, path: str) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     df.to_pickle(path)
-    df.to_sql(name='cleaned_performances', con=get_db_engine(), if_exists='replace', index=False)
 
 def preprocess_music_pipeline() -> None:
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    raw_pkl = os.path.join(base_dir, 'raw_dataframes', 'raw_data.pkl')
-    preprocessed_pkl = os.path.join(base_dir, 'raw_dataframes', 'preprocessed_data.pkl')
+    raw_pkl = os.path.join(base_dir, 'data', 'dataframes', 'raw_data.pkl')
+    preprocessed_pkl = os.path.join(base_dir, 'data', 'dataframes', 'preprocessed_data.pkl')
     
     df = load_data(raw_pkl)
     df = clean_and_encode(df)
