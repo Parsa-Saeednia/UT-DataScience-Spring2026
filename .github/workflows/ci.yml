@@ -59,4 +59,4 @@ jobs:
 
     - name: Run Main Pipeline
       run: |
-        python scripts/pipeline.py
+        python pipeline.py
