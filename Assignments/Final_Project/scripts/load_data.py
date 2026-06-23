@@ -19,8 +19,8 @@ def save_dataframe(df: pd.DataFrame, path: str) -> None:
 
 def load_data_from_db() -> None:
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    query_path = os.path.join(base_dir, 'database', 'queries.sql')
-    pkl_path = os.path.join(base_dir, 'raw_dataframes', 'raw_data.pkl')
+    query_path = os.path.join(base_dir, 'database', 'load_query.sql')
+    pkl_path = os.path.join(base_dir, 'data', 'dataframes', 'raw_data.pkl')
     
     sql_query = read_query(query_path)
     df = execute_query(sql_query)
