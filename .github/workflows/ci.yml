@@ -22,7 +22,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: Assignment/Final_Project
+        working-directory: Assignments/Final_Project
 
     env:
       DB_HOST: 127.0.0.1
