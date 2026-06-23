@@ -1,0 +1,62 @@
+name: Run Music Pipeline
+
+on:
+  push:
+    branches: [ main, MohammadRezaPirhadi, MohammadHosseinMazaheri, ParsaSaeednia ]
+  pull_request:
+    branches: [ main, MohammadRezaPirhadi, MohammadHosseinMazaheri, ParsaSaeednia ]
+
+jobs:
+  test_pipeline:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: maestro_db
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    defaults:
+      run:
+        working-directory: Assignment/Final_Project
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: maestro_db
+
+    steps:
+    - name: Get Code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Create Dummy CSV for Testing
+      run: |
+        mkdir -p data/maestro-v3.0.0
+        echo "canonical_composer,canonical_title,split,year,duration,midi_filename,audio_filename" > data/maestro-v3.0.0/maestro-v3.0.0.csv
+        for i in {1..12}; do
+          echo "Beethoven,Symphony No $i,train,2026,120.0,mock.mid,mock.mp3" >> data/maestro-v3.0.0/maestro-v3.0.0.csv
+        done
+
+    - name: Initialize Database Environment
+      run: |
+        python scripts/setup_db.py
+
+    - name: Run Main Pipeline
+      run: |
+        python scripts/pipeline.py
