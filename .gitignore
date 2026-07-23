@@ -77,3 +77,8 @@ Assignments/CA4/data/CA4_DB
 Assignments/Final_Project/data
 env/
 .env
+
+Assignments/Final_Project/report
+Assignments/Final_Project/kubectl
+Assignments/Final_Project/minikube-linux-amd64
+*.yaml
