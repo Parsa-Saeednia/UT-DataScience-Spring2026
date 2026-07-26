@@ -1,0 +1,401 @@
+question_id,question_stem,choices_text,gold_answer,subject_area,difficulty,annotation_reasoning
+89,Water evaporates less,"A: on a hot street
+B: in a basement
+C: on a sunny day
+D: next to a window",B,earth_science,2,"The question asks for the application of a single fact regarding the factors affecting evaporation rates (humidity and temperature), identifying the basement as the coolest and most humid environment."
+7-890,"A bird makes its home in various places, such as","A: groves of plants
+B: waterways
+C: city streets
+D: public parks",A,biology,1,"The question asks for a basic factual recall of where birds typically live, which is a fundamental concept in biology/nature studies."
+11-331,Lava is found above the ground because when there is lava there is,"A: a soft song
+B: a frontal lobe
+C: a small indent
+D: a movement happening",D,earth_science,1,"The question asks for a basic association between lava and geological activity (movement), though the options are poorly phrased."
+10-1159,the Earth rotating on its axis causes the sun to appear to move across the sky during what?,"A: dark hours
+B: sunlight deficient
+C: night
+D: waking hours",D,earth_science,1,"The question asks for a basic factual recall of the effect of Earth's rotation on the apparent motion of the sun, which is a fundamental concept in basic earth science."
+10-882,One component of rock formations in caves is,"A: liberal tears
+B: bat urine
+C: salty ocean water
+D: granite statues",B,earth_science,1,"The question asks for a basic factual identification of a component of cave rock formations, though the options are largely nonsensical."
+8-439,Consuming a hot liquid can,"A: Remove years of rust on a knife
+B: sooth a pained esophagus
+C: Cleanse the soul for God
+D: Cure blindness in a child",B,biology,1,"The question asks for a basic factual understanding of the physiological effect of consuming a hot liquid on the body, though the options are largely nonsensical."
+9-626,The slight angle of the axis of the human planet is responsible for the energy allotment that is received by what?,"A: polar areas
+B: mars continents
+C: free countries
+D: all countries",D,astronomy,1,"The question asks about the basic concept of axial tilt and its effect on energy distribution, though the phrasing is awkward."
+14-691,What is changed when an object is painted?,"A: chemical makeup
+B: light absorption
+C: sunshine
+D: rust",B,chemistry,1,"The question asks for a basic factual identification of what changes when an object is painted, which is a simple recall of physical properties like light absorption."
+9-401,organic life requires certain things to grow such as,"A: nutritional values
+B: zinc
+C: acid
+D: darkness",A,biology,1,"The question asks for a basic requirement for organic life, which is a simple factual recall of nutritional needs."
+14-1329,What requires soil to grow?,"A: lakes
+B: car engine
+C: daffodils
+D: cows",C,biology,1,"The question asks for a basic factual recall of what needs soil to grow, which is a fundamental concept in primary biology."
+13-112,"as the amount of water received by a plant increases , that plant will usually","A: form more vegatation
+B: harden like rocks
+C: start singing
+D: fly to space",A,biology,1,"The question asks for a basic factual understanding of plant growth in relation to water, and the distractors are obviously incorrect."
+7-51,many vehicles emitting pollution into the air may occur when,"A: horses pull carriage over snow
+B: child is propelling scooter
+C: trolley collects current from overhead wire
+D: EMT transports panting patient",D,earth_science,2,"The question asks for the identification of a vehicle that emits pollution, which is a basic application of environmental science concepts."
+1944,Condensation over night,"A: leads to extremely dry conditions
+B: can lead to slippery grass
+C: causes plants to wilt and die
+D: causes black ice on bridges",B,earth_science,2,The question asks for a direct application of the concept of condensation (dew) and its observable effect on grass.
+9-742,cooking a meal will lead to a transfer of energy into that meal?,"A: this is false
+B: this is provable
+C: maybe
+D: all of these",B,physics,1,"The question asks for a basic understanding of energy transfer during cooking, which is a fundamental concept of thermodynamics (physics)."
+10-820,"If one was to cease perspiration, what would they be most at risk for","A: hypothermia
+B: seizure
+C: overheating
+D: cramps",C,biology,2,"The question asks for the direct consequence of stopping perspiration, which is a basic application of the fact that sweating cools the body."
+10-1010,What can cause objects to repel each other?,"A: fake magnets
+B: smell
+C: identical charges
+D: sunlight",C,physics,1,The question asks for a basic factual recall of the property that identical charges repel each other.
+14-114,If a tree is cut down what will happen to it?,"A: vitality extinguishing
+B: growth
+C: vigor
+D: life",A,biology,1,"The question asks for a basic outcome of cutting down a tree, which is a simple factual recall of the concept of death/loss of vitality."
+14-1470,"If a living being will make it to adulthood, then the most important thing to it will be","A: talons
+B: mining
+C: edibles
+D: hotels",C,biology,1,"The question asks for a basic requirement for survival (food/edibles) for any living being, requiring only simple factual recall."
+9-412,the mantle is,"A: a level of our planet
+B: the planet closest to ours
+C: a kind of rock found on Earth
+D: the deepest part of our planet",A,earth_science,1,"The question asks for a basic definition of the mantle, which is a fundamental factual recall task."
+14-918,An example of an electric insulator could be,"A: magic
+B: orange juice
+C: tupperware
+D: milk",C,physics,1,"The question asks for a basic identification of an electric insulator from a list of common materials, requiring only simple factual recall."
+10-580,"A woman needs to check something with binoculars, so it is likely","A: very near
+B: inside the room
+C: a ways away
+D: in outer space",C,physics,1,"The question tests basic factual knowledge of the purpose of binoculars, which is a simple definition/recall task."
+14-686,A seismograph is a kind of tool for measuring the size of,"A: rivers
+B: home planet tremors
+C: volcanic activity
+D: lakes",B,earth_science,1,"The question asks for the basic definition and purpose of a seismograph, which is a simple factual recall task."
+13-84,What do humans do to poison the air?,"A: tailoring old clothing items
+B: using a plastic bottle to create a self water for a plant
+C: placing plastic into big lakes
+D: using old T-shirts to make a blanket",C,earth_science,1,"The question asks for a basic identification of an activity that causes air pollution, requiring simple factual recall of environmental impacts."
+10-844,A bat may use echolocation to,"A: the grocery store
+B: call a friend
+C: track a moth
+D: a concert",C,biology,1,"The question asks for a basic factual recall of the purpose of echolocation in bats, and the distractors are nonsensical."
+13-458,If I wanted to use a tree as inspiration to make a house more sturdy what part would I use?,"A: the leaves
+B: the pine cones
+C: the fruit
+D: the roots",D,biology,2,"The question requires a basic understanding of the function of tree roots in providing stability, which is a direct application of a single biological fact."
+14-1312,"Without  photosynthesis, animals that rely on plants for this would be out of luck.","A: selling food
+B: nothing
+C: kissing
+D: sustenance",D,biology,1,The question asks for a basic definition/association between photosynthesis and the survival (sustenance) of animals.
+11-370,Heat energy may be added to this in order to cook it.,"A: velvet socks
+B: fish food
+C: dish water
+D: cupcake batter",D,physics,1,"The question asks for a basic identification of a substance that is cooked using heat, which is a fundamental concept of thermal energy application."
+1875,Which would be the result of the breeding of two wolves?,"A: kittens
+B: wolf pups
+C: fox pups
+D: dog pups",B,biology,1,The question asks for the basic factual recall of the offspring of a specific animal species.
+10-76,"A person has sand in their shoe from the beach, and they dump the sand out at their doorstep many miles away. The sand could end up back on that beach if","A: magic creatures move it
+B: someone goes to the zoo
+C: a large gust passes
+D: people wish for it",C,earth_science,2,"The question asks for a direct application of the concept of wind erosion/transportation of sediment, which is a basic earth science concept."
+13-119,Humidity is the amount of what vapor in the air?,"A: wind
+B: humidifier
+C: cold
+D: h2o",D,earth_science,1,"The question asks for a basic definition of humidity, requiring simple factual recall of what substance constitutes water vapor."
+12-383,Chewying and swallowing a steak,"A: serves it hot
+B: breaks it down
+C: losses energy
+D: dies",B,biology,1,"The question asks for a basic understanding of the function of chewing and swallowing in the process of digestion, which is a simple factual recall."
+11-367,The diminishing supply of this nonrenewable resource is leading to advancements in automotive technology,"A: petrol
+B: coal
+C: trees
+D: steam",A,earth_science,1,"The question asks for the identification of a nonrenewable resource used in automotive technology, which is a basic factual recall task."
+10-23,A system of tubes that relocates water and nutrients around in order to make most use of them can be found in,"A: a lily
+B: a door
+C: a table
+D: a rock",A,biology,1,The question asks for a basic identification of a biological system (vascular system in plants) among non-living objects.
+10-779,A puddle after a rain will eventually,"A: leave to town
+B: jump for joy
+C: recede from warmth
+D: burn with acid",C,earth_science,1,"The question asks for a basic factual understanding of evaporation (puddles disappearing due to warmth), which is a basic recall/definition level task."
+12-342,"If a thing is going to be able to expand, it will require","A: nutriment
+B: pipes
+C: flounder
+D: conversation",A,other,1,"The question is not based on a scientific principle but rather appears to be a general vocabulary or logic puzzle, making it a basic recall/association task."
+7-180,Arctic foxes are white in order to,"A: hide from their predators
+B: hide in their environment
+C: keep their bodies warm
+D: keep their fur clean",B,biology,1,"The question asks for a basic factual recall of the concept of camouflage in animals, which is a fundamental biological concept."
+9-879,the sun makes rounds around this planet,"A: maybe
+B: this is wrong
+C: all of these
+D: this is true",B,astronomy,1,"The question asks about the orbital relationship between the Sun and planets, which is a basic astronomy fact, although the question and options are poorly phrased."
+12-850,Where would more water fall from the sky yearly?,"A: inside of a mansion
+B: a place where wild camels roam
+C: a place where a lot of grass grows
+D: on dark side of the moon",C,earth_science,3,"The question requires the student to associate precipitation levels with environmental characteristics (grasslands vs. deserts) and eliminate impossible scenarios (indoors, moon)."
+9-413,"A person needs to find a way to shore while on a raft. Another person tells the first person which direction to go in order to safely reach land, so the person directing is","A: navigating
+B: negating
+C: relying
+D: destroying",A,other,1,The question tests basic vocabulary and definition recall rather than a specific scientific concept.
+12-611,Magnification makes a small thing,"A: stuck on metal
+B: hard to see
+C: really very tiny
+D: more easily seen",D,physics,1,"The question asks for a basic definition of magnification, which is a fundamental concept in optics (physics) and requires simple factual recall."
+12-428,If an island is experiencing a hot summer it is because,"A: of the water
+B: of the axis
+C: of the shade
+D: of glaciers",B,earth_science,2,"The question asks for the cause of seasonal temperature changes, which is a basic application of the concept of Earth's axial tilt."
+14-1496,What lives in their habitat?,"A: dahlias
+B: rocks
+C: lakes
+D: shoes",A,biology,1,"The question asks for a living thing (dahlias) among non-living objects, which is a basic factual recall of what constitutes a living organism."
+11-204,Which of the following is an example of ecological succession?,"A: a group of horses slowly becomes extinct due to loss of habitat
+B: a group of rats in a lab learn to navigate a maze
+C: a soccer team trains for the championship
+D: Trees, insects, and birds in a forest grew from wildfire-ravaged lands",D,biology,1,"The question asks for a basic definition/example of ecological succession, which is a fundamental factual recall task."
+7-741,Absorbing sun rays,"A: raises the Fahrenheit of an object
+B: lowers the Celsius of an object
+C: causes the object to cool
+D: causes the temperature of the object to descend",A,physics,1,"The question asks for the basic effect of absorbing solar radiation on an object's temperature, which is a simple factual recall of heat transfer."
+13-585,if a habitat is destroyed then that habitat,"A: is clean
+B: is smelly
+C: is super
+D: is gone forever",D,biology,1,"The question asks for a basic definition or direct consequence of habitat destruction, requiring only simple factual recall."
+14-573,With wind gusts and green skys you should pack,"A: golf clubs
+B: a picnic basket
+C: a lightning rod
+D: an umbrella",D,earth_science,2,"The question asks for a practical application of weather patterns (green skies and wind gusts) to infer a potential storm, requiring a simple direct application of common knowledge about severe weather."
+9-605,"The air was cold, so all night the sheep kept","A: sleeping
+B: shaking
+C: jumping
+D: running.",B,other,1,The question tests basic common sense and general knowledge about how animals react to cold temperatures rather than a specific scientific principle.
+12-833,Sediment is a result of the process of,"A: running
+B: jumping
+C: magic
+D: rain",D,earth_science,1,"The question asks for a basic factual recall of what causes sediment, and the options provided are very simple, making it a basic definition/recall task."
+9-319,Humans are able to eat,"A: only meat products and byproducts
+B: exclusively grains and fruits
+C: a full assortment of food groups including meat, grains, and vegetables
+D: sea life and only green vegetables",C,biology,1,"The question asks for a basic factual recall of human dietary habits, which is common knowledge."
+14-778,"A person is looking at an organism naked to the human eye. Desiring to observe it more clearly, a person engages the use of","A: binoculars
+B: a telescope
+C: a meter stick
+D: lab equipment",D,biology,1,"The question asks for a basic tool used to observe small organisms, requiring simple factual recall of common laboratory or observational tools."
+11-572,"2000 years ago, this method would likely have brought sand from the coast to the desert","A: the pyramids often eroded, making their own sand
+B: constant breezes over time
+C: human automobiles transfer materials
+D: the space shuttle moved sand great distances",B,earth_science,2,The question asks for a direct application of the concept of wind erosion and transport (aeolian processes) to a specific scenario.
+12-639,Deer are most likely to give a wide berth to a,"A: personal garden
+B: field of alfalfa
+C: cool mountain stream
+D: decomposing body",D,biology,2,The question requires basic knowledge of animal behavior and the instinctual avoidance of decay/disease (decomposing body) as a survival mechanism.
+14-1138,What typically occurs between a sixth and a half of a minute?,"A: a volcano
+B: a television series
+C: an hour
+D: an earthquake",D,other,1,"The question is a riddle or a wordplay puzzle rather than a scientific inquiry, as it asks about time intervals in a nonsensical way."
+10-499,"Salamanders may be unable to survive in a hot, dry location lacking food and water, but if it has food and water in an ideal location","A: it is extinguished
+B: it may flourish
+C: it is financed
+D: it may crash",B,biology,1,"The question asks for a basic logical completion of a sentence regarding a salamander's survival, requiring only basic factual recall or common sense rather than complex scientific reasoning."
+9-880,some level of crushing and pressure would be needed for sedimentary rock formation,"A: this is accurate
+B: maybe true
+C: this is untrue
+D: all of these",A,earth_science,1,"The question asks for a basic factual recall of the process of sedimentary rock formation (lithification), which is a fundamental concept in earth science."
+7-499,Roads need repaved in spring because,"A: they are cold
+B: road need it
+C: they are lumpy
+D: ice ruins them",D,earth_science,2,"The question asks for a direct cause-and-effect relationship regarding road damage caused by freeze-thaw cycles, which is a basic application of earth science concepts."
+10-937,"Due to plates gliding over our planet's mantle, why is Vancouver likely to be destroyed?","A: it sits on an active fault line
+B: it's located in Canada
+C: it has French people
+D: the Pacific Ocean is only half as blue as the Atlantic",A,earth_science,1,"The question asks for a basic factual connection between plate tectonics and seismic risk, and the distractors are trivial, making the answer obvious."
+11-517,If blue whales have trouble finding any mates,"A: they could become overpopulated
+B: their population could drop to the sum of negative two and two
+C: they could all become sharks
+D: they could mate with killer whales",B,biology,2,"The question asks for a direct application of the concept of population decline due to lack of mating, though the options are phrased in a simplistic or slightly odd way."
+7-697,"Since June is cold and wet in Australia, it makes sense that at the same time","A: Michigan would experience a heat wave
+B: Florida would be raining
+C: winter would be raging in Colorado
+D: everywhere in the world is cold",A,earth_science,3,"The question requires understanding the relationship between seasons in the Northern and Southern Hemispheres, which is a moderate cause-and-effect reasoning task."
+10-1013,A person playing a song on a string instrument makes strings,"A: mold
+B: bawl
+C: tear
+D: shudder",D,physics,1,"The question asks for a basic term describing the vibration of a string instrument, which is a factual recall of basic physical properties of sound."
+8-156,which of these can alter its appearance naturally to evade being captured?,"A: a little chameleon
+B: a human being
+C: a lion
+D: a goat",A,biology,1,"The question asks for a basic factual recall of a well-known animal's ability to camouflage, which is a fundamental biological fact."
+12-851,"If a deer eats a berry plant, the plant eats","A: a berry juice slurry
+B: large slices of meat
+C: its self created nutriment
+D: small bugs that glow",C,biology,1,"The question asks for basic knowledge about how plants obtain nutrients (autotrophy), though the phrasing is slightly awkward."
+11-369,"A storm is covering a town in sleet, which means that things","A: will be dry
+B: will be burning
+C: will be slick
+D: will be toasty",C,earth_science,1,"The question asks for the basic definition or common knowledge associated with sleet, requiring simple factual recall."
+13-509,the winter solstice is on June 21st in the,"A: upper side of earth
+B: only online in blogs
+C: on the dark side of the moon
+D: lower half of terra",D,astronomy,1,The question asks for a basic factual recall of the winter solstice date relative to the hemispheres of the Earth.
+12-668,Which of these lays eggs?,"A: vampire bats
+B: flying squirrels
+C: lesser whitethroats
+D: coyotes",C,biology,1,The question requires basic factual recall of animal classification and reproductive methods.
+10-129,As the amount of water a plant receives increases what will usually happen with it?,"A: diminish
+B: shrinking
+C: grow metal
+D: expanded proportions",D,biology,1,"The question asks for a basic factual understanding of how water affects plant growth, which is a fundamental biological concept."
+12-731,"If a river is flowing down the east side of a hill, then the hill","A: drops at a slow rate
+B: drops sharply right there
+C: drops sharply on the west
+D: is evenly sloped everywhere",B,earth_science,2,"The question requires a basic understanding of how water flows downhill due to gravity, which is a direct application of a single geographical fact."
+12-568,A way to ingest more fiber for a bear is to,"A: eat meat
+B: consume fish
+C: devour water
+D: masticate leaves",D,biology,1,"The question asks for a basic factual recall of what food source contains fiber, which is a fundamental biological/nutritional concept."
+10-706,Some prey animals may elude predators by,"A: being stinky
+B: being friendly
+C: being slow
+D: being loving",A,biology,1,"The question asks for a basic factual recall of a common animal defense mechanism (chemical defense/stink), which is a fundamental concept in biology."
+11-231,"A needle lined with magnets will pull north. If north is to the right and you want to go west, you'd walk","A: straight
+B: left
+C: backwards
+D: right",A,earth_science,3,The question requires the user to understand the basic function of a compass (magnetism) and then apply spatial reasoning to determine the direction of west relative to north.
+8-432,"if a student locates their pen on the table across the room, which of these happened?","A: there was light from pen to cornea
+B: the pen failed to reflect any light
+C: none of these
+D: the person has psychic powers",A,physics,1,"The question asks for a basic understanding of how vision works (light traveling from an object to the eye), which is a simple factual recall of a basic optics concept."
+10-232,A renewable resource you can find on Earth is,"A: stars
+B: Oil
+C: sand clay
+D: fossil fuels",C,earth_science,1,"The question asks for a basic definition/identification of a renewable resource, which is basic factual recall."
+14-549,If you missed the rising moon today you will have to wait till when to see it again,"A: 30 years
+B: 10 months
+C: 10 minutes
+D: 24 hours",D,astronomy,2,"The question asks for the basic knowledge of the moon's daily rising cycle, which is a direct application of a single fact regarding lunar orbits."
+10-1156,"A cow eats some hay, an apple and a piece of bread. In its tummy","A: the food rots
+B: the food dissolves
+C: the food melts
+D: the food grows",B,biology,1,"The question asks for a basic understanding of digestion, which is a fundamental biological process, requiring simple factual recall of what happens to food in the stomach."
+10-138,A fan pushes air with,"A: forks
+B: straw
+C: rotating flat surface
+D: lumber",C,physics,1,"The question asks for a basic factual identification of how a fan operates, requiring simple recall of a common object's function."
+13-620,An example of evaporation is a body of water drying up by,"A: prolonged solar expsosure
+B: cooking lunch
+C: taking naps
+D: smiting enemies",A,earth_science,1,"The question asks for a basic example of evaporation, which is a fundamental concept in earth science/meteorology, requiring simple factual recall."
+12-845,A sign of the spring season could be,"A: hibernation
+B: flip-flops
+C: Christmas
+D: heavy coats",B,earth_science,1,"The question asks for a basic factual recall of seasonal characteristics, specifically identifying a sign of spring."
+11-266,A person wanting to harvest tomatoes in the harshest winter in decades could do so if they obtained a,"A: snowblower
+B: shovel
+C: underground pool
+D: heat lamp",D,biology,2,The question requires a basic understanding of plant growth requirements (warmth) and identifying a tool that provides that heat.
+14-850,Which is most helpful to a constipated Elephant?,"A: cheese
+B: bubblegum
+C: oats
+D: empty promises",C,biology,1,"The question asks for a dietary solution to a biological condition (constipation) in an animal, though the options are largely humorous."
+10-833,"A glacier moved through an area years and years ago, and scientists can tell this by","A: looking at the moon
+B: looking at the dogs
+C: looking at the sky conditions
+D: glancing at nearby stone",D,earth_science,1,The question asks for a basic factual recall of how geological evidence (like glacial striations on rocks) is used to identify past glacial movement.
+12-219,Sticking your hand in water above 100 degrees Celsius,"A: will freeze your digits
+B: will lead to scalded fingers
+C: will heal any sores or wounds
+D: will lead to frostbite",B,biology,1,"The question asks for a basic factual recall of the effect of boiling water on human skin, which is a common knowledge fact."
+1295,When the demand for corn rises,"A: farmers grow different crops
+B: farmers ask people to stop eating corn
+C: farmers stop planting corn
+D: farmers must harvest more corn",D,other,1,"The question is about basic economic principles of supply and demand, which does not fall under the primary science categories provided."
+10-963,What can you use to protect your eyes from the sun?,"A: shoes
+B: pants
+C: nails
+D: sheet of paper",D,other,1,"The question asks for a basic factual recall of a common object used for sun protection, requiring no complex scientific reasoning."
+812,The sun was straight above us when we,"A: woke up
+B: went to work
+C: took a break
+D: went home",C,astronomy,2,"The question requires basic knowledge that the sun is at its highest point (straight above) at midday, which is a common time for a break or lunch."
+12-115,"The population of zebras is stagnant due to a lack of new baby zebras, what will happen over time to the community without support?","A: sadness
+B: resurgence
+C: shrinkage
+D: regrowth",C,biology,1,"The question asks for a basic prediction of population size based on a lack of reproduction, which is a simple factual recall of the concept of population decline."
+12-1084,Which creature is built to move though wet currents?,"A: a human
+B: a porpoise
+C: a cat
+D: a bird",B,biology,1,The question requires basic factual recall of animal characteristics and their habitats.
+11-240,What would be a benefit of skipping showers?,"A: getting facial acne
+B: being smelly
+C: having dirty hair
+D: fostering healthy bacteria",D,biology,1,"The question asks for a basic benefit of not showering, which requires simple factual recall regarding the role of skin bacteria."
+751,Which of the following has a population of zero?,"A: Merriam's elk
+B: bison
+C: llama
+D: whooping crane",A,biology,1,"The question asks for the identification of an extinct species, which is a basic factual recall task."
+10-729,An example of an animal pollinator is,"A: Dogs
+B: Leaves
+C: Cape elephant sengis
+D: Water",C,biology,1,"The question asks for a basic identification of an animal pollinator from a list of options, requiring only simple factual recall."
+14-986,In order for a crane to operate properly it requires,"A: sand
+B: the wind
+C: solar power
+D: a fulcrum",D,physics,1,"The question asks for a basic definition/component of a simple machine (the crane as a lever), requiring simple factual recall of the term 'fulcrum'."
+12-107,As the car approaches a hill it will become harder to,"A: steer
+B: park
+C: push
+D: brake",C,physics,2,The question asks for a direct application of the concept of force and gravity when pushing an object up an incline.
+10-746,Plants in an incinerator would,"A: petrify
+B: freeze
+C: wilt
+D: cremate",D,biology,1,"The question asks for a basic understanding of what happens to organic matter (plants) when exposed to extreme heat in an incinerator, which is a simple factual recall/definition task."
+14-28,Relocating a stalled vehicle requires a lot of,"A: slopes
+B: force
+C: wind
+D: gravity",B,physics,1,The question asks for a basic definition/application of the concept of force in the context of moving an object.
+12-1025,A forest was turned to mostly charcoal overnight. What happened?,"A: a spaceship took the trees and put charcoal in their place
+B: the trees died of old age
+C: someone was careless with a match
+D: the trees were chopped down",C,earth_science,2,"The question requires a basic understanding of how fire (combustion) transforms wood into charcoal, which is a direct application of a single scientific fact."
+13-580,One way to remember the method of Scientific Classification is,"A: run
+B: dive
+C: swim
+D: make a sentence",D,other,1,"The question asks for a basic mnemonic device for scientific classification, which is a simple factual recall task."
+9-291,Where might you find eggs?,"A: forest
+B: space
+C: lava
+D: ocean",A,biology,1,"The question asks for a basic factual recall of where eggs (biological organisms) are found in nature, requiring only simple identification."
+11-209,A person can create the most friction by rolling a ball over,"A: glass
+B: gravel
+C: ice
+D: marble",B,physics,1,"The question asks for a basic factual recall of which surface creates the most friction, requiring only a basic understanding of surface texture."
+10-1180,An industry that create a lot of waste is:,"A: Solar Power Companies
+B: Recycling companies
+C: water production companies
+D: Cleaning Companies",D,earth_science,1,"The question asks for basic factual recall regarding which industry typically produces waste, requiring only simple identification."
+14-919,Which Disney character was a herbivore?,"A: Pluto
+B: Cheshire Cat
+C: Bambi
+D: Simba",C,biology,1,"The question asks for the identification of a herbivore among known characters, which is a basic factual recall of the definition of a herbivore."
+14-614,Which would likely lessen the impact of climate change the most?,"A: Earth Day
+B: hurricanes
+C: tsunamis
+D: wildfires",A,earth_science,1,"The question asks for a basic identification of an action (Earth Day) that aims to reduce climate change, compared to natural disasters that exacerbate or result from it."
