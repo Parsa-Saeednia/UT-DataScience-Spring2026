@@ -77,5 +77,10 @@ Assignments/CA4/data/CA4_DB
 Assignments/CA5/data/images
 Assignments/Final_Project/data
 Assignments/CA5/data/task1
+Assignments/CA5/parsbert_model
+Assignments/Final_Project/report
+Assignments/Final_Project/kubectl
+Assignments/Final_Project/minikube-linux-amd64
+*.yaml
 env/
 .env
