@@ -3,6 +3,11 @@ import numpy as np
 import pandas as pd
 import pretty_midi
 
+# Krumhansl-Schmuckler pitch profiles for Key Normalization
+MAJOR_PROFILE = np.array([6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88])
+MINOR_PROFILE = np.array([6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17])
+QUANTIZE_RES = 0.125  # 16th note representation in seconds
+
 def filter_outliers(df: pd.DataFrame) -> pd.DataFrame:
     df = df[(df['duration'] >= 60.0) & (df['duration'] <= 1000.0)]
     if 'canonical_composer' in df.columns:
@@ -20,8 +25,41 @@ def scale_duration(df: pd.DataFrame) -> pd.DataFrame:
         df['duration_scaled'] = (df['duration'] - mean_dur) / std_dur if std_dur > 0 else 0.0
     return df
 
+def transpose_to_common_key(notes: list) -> list:
+    """Normalizes MIDI notes to C Major or A Minor."""
+    if not notes:
+        return []
+    
+    pitches = [n.pitch for n in notes]
+    pc_counts = np.bincount([p % 12 for p in pitches], minlength=12)
+    
+    if np.std(pc_counts) == 0:
+        return notes
+        
+    maj_corr = [np.corrcoef(pc_counts, np.roll(MAJOR_PROFILE, i))[0, 1] for i in range(12)]
+    min_corr = [np.corrcoef(pc_counts, np.roll(MINOR_PROFILE, i))[0, 1] for i in range(12)]
+    
+    best_maj_key = np.argmax(maj_corr)
+    best_min_key = np.argmax(min_corr)
+    
+    # Target C Major (0) or A Minor (9)
+    if maj_corr[best_maj_key] >= min_corr[best_min_key]:
+        shift = -best_maj_key
+    else:
+        shift = 9 - best_min_key
+        
+    # Minimize the shift distance to avoid extremes
+    if shift > 5: shift -= 12
+    elif shift < -6: shift += 12
+        
+    for n in notes:
+        n.pitch = int(np.clip(n.pitch + shift, 0, 127))
+        
+    return notes
+
 def _extract_notes(pm: pretty_midi.PrettyMIDI) -> list:
-    return sorted([n for inst in pm.instruments for n in inst.notes], key=lambda x: x.start)
+    notes = sorted([n for inst in pm.instruments for n in inst.notes], key=lambda x: x.start)
+    return transpose_to_common_key(notes)
 
 def _build_transition_matrix(pitch_classes: np.ndarray) -> np.ndarray:
     matrix = np.zeros((12, 12))
@@ -34,15 +72,29 @@ def _build_sequence_tokens(notes: list) -> list:
     window_vel = []
     
     for i, n in enumerate(notes):
-        step = n.start - notes[i-1].start if i > 0 else 0.0
-        dur = n.end - n.start
+        # 1. Quantized Timing
+        raw_step = n.start - notes[i-1].start if i > 0 else 0.0
+        raw_dur = n.end - n.start
+        
+        quantized_step = int(round(raw_step / QUANTIZE_RES))
+        quantized_dur = max(1, int(round(raw_dur / QUANTIZE_RES)))
         
         window_vel.append(n.velocity)
         if len(window_vel) > 10:
             window_vel.pop(0)
             
         energy = int(np.clip((sum(window_vel) / len(window_vel)) / 12.7, 1, 10))
-        tokens.append([int(n.pitch), float(dur), float(step), int(n.velocity), energy])
+        
+        # 2. Rolling Harmonic Context
+        active_pcs = np.zeros(12, dtype=int)
+        for prev_n in reversed(notes[max(0, i-50):i]):
+            if prev_n.start <= n.start < prev_n.end:
+                active_pcs[prev_n.pitch % 12] = 1
+                
+        # Combine base token with the 12-dimensional harmonic context
+        token = [int(n.pitch), quantized_dur, quantized_step, int(n.velocity), energy]
+        token.extend(active_pcs.tolist())
+        tokens.append(token)
         
     return tokens
 
