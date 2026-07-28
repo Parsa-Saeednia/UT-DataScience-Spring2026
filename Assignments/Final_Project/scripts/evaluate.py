@@ -35,7 +35,7 @@ def evaluate_model():
     # Note: These hyperparameters MUST match the best_params found during training
     # For a fully automated pipeline, you would save best_params to a JSON and load them here.
     # We will assume the defaults or a known good configuration for now.
-    model = MusicLSTM(input_dim=input_dim, hidden_dim=128, num_layers=2, vocab_size=vocab_size)
+    model = MusicLSTM(input_dim=input_dim, hidden_dim=256, num_layers=3, vocab_size=vocab_size)
     
     # Load the state dictionary (the learned weights)
     model.load_state_dict(torch.load(model_path, map_location=device))

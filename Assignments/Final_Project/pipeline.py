@@ -5,27 +5,27 @@ def run_pipeline():
     print("Starting Data Science Pipeline: ")
     
     print("\nStep 1: Loading Data: ")
-    result = subprocess.run(["python", "scripts/load_data.py"])
+    result = subprocess.run([sys.executable, "scripts/load_data.py"])
     if result.returncode != 0:
         sys.exit(1)
         
     print("\nStep 2: Preprocessing: ")
-    result = subprocess.run(["python", "scripts/preprocess.py"])
+    result = subprocess.run([sys.executable, "scripts/preprocess.py"])
     if result.returncode != 0:
         sys.exit(1)
         
     print("\nStep 3: Feature Engineering: ")
-    result = subprocess.run(["python", "scripts/feature_engineering.py"])
+    result = subprocess.run([sys.executable, "scripts/feature_engineering.py"])
     if result.returncode != 0:
         sys.exit(1)
         
     print("\nStep 4: Model Training: ")
-    result = subprocess.run(["python", "scripts/train.py"])
+    result = subprocess.run([sys.executable, "scripts/train.py"])
     if result.returncode != 0:
         sys.exit(1)
         
     print("\nStep 5: Model Evaluation: ")
-    result = subprocess.run(["python", "scripts/evaluate.py"])
+    result = subprocess.run([sys.executable, "scripts/evaluate.py"])
     if result.returncode != 0:
         sys.exit(1)
         
